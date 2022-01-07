@@ -1,15 +1,15 @@
 ﻿using TimeUtil.BussinesLogic;
-using TimeUtil.sharedClasses;
+using TimeUtil.SharedClasses;
 
 string filePath = @"C:\Users\Matt\OneDrive - SERC\workign from home\HR\calendare exports\calendar exports\Calendar export May-July 21.CSV";
 
 
 using FileStream fs = new FileStream(filePath, FileMode.Open);
 
-OutlookCalendar cal = OutlookCalendarCSVParser.Parse(fs);
+OutlookCalendar cal = await OutlookCalendarCSVParser.Parse(fs);
 
 
-Event[]? events = cal.Events.Where(x => x.Categories == "Business Services Delivery" || x.Categories == "CDP").ToArray();
+Event[]? events = cal.Events.Where(x => x.Categories == "Business Services Delivery" || x.Categories == "CPD").ToArray();
 
 
 

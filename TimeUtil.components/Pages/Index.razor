@@ -1,0 +1,38 @@
+﻿@page "/"
+
+@using TimeUtil.SharedClasses
+@using TimeUtil.BussinesLogic
+
+<PageTitle>Index</PageTitle>
+
+<div style="display: flex; justify-content: center;">
+    <InputForm OnSubmit="HandleSubmit" />
+</div>
+
+@if(cal is not null && categoires is not null)
+{
+    <div>Total hours: @cal.Total().TotalHours</div>
+
+    <div>Total hours with categories: @cal.Total(categoires).TotalHours</div>
+}
+
+
+@code {
+    private OutlookCalendar? cal;
+    private IEnumerable<string?>? categoires;
+
+    private async Task HandleSubmit(InputFormSubmitArgs input)
+    {
+        categoires = input.Categories;
+
+        await using Stream stream = input.File.OpenReadStream(input.File.Size);
+        using StreamContent streamContent = new(stream);
+        cal = await OutlookCalendarCSVParser.Parse(await streamContent.ReadAsStreamAsync());
+
+        foreach(var ev in cal.Events)
+        {
+            Console.WriteLine(ev.Categories);
+        }
+    }
+
+}

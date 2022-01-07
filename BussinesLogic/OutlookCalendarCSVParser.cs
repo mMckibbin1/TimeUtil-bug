@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
-using TimeUtil.sharedClasses;
+using TimeUtil.SharedClasses;
 
 namespace TimeUtil.BussinesLogic
 {
@@ -12,14 +12,20 @@ namespace TimeUtil.BussinesLogic
             IncludePrivateMembers = true,
         };
 
-        public static OutlookCalendar Parse(FileStream fileStream)
+        public static async Task<OutlookCalendar> Parse(Stream stream)
         {
-            using var reader = new StreamReader(fileStream);
+            using var reader = new StreamReader(stream);
             using var csv = new CsvReader(reader, configuration);
             csv.Context.RegisterClassMap<EventMap>();
-            Event[] records = csv.GetRecords<Event>().ToArray();
+            var eventsStream = csv.GetRecordsAsync<Event>();
 
-            return new(records);
+            List<Event> events = new();
+            await foreach (var record in eventsStream)
+            {
+                events.Add(record);
+            }
+
+            return new(events);
         }
     }
 

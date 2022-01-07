@@ -1,12 +1,12 @@
-﻿namespace TimeUtil.sharedClasses
+﻿namespace TimeUtil.SharedClasses
 {
     public class OutlookCalendar
     {
         private readonly Event[] _events;
 
-        public OutlookCalendar(Event[] events)
+        public OutlookCalendar(IEnumerable<Event> events)
         {
-            _events = events;
+            _events = events.ToArray();
         }
 
         public IEnumerable<Event> Events => _events;
