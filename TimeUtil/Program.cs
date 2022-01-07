@@ -1,10 +1,10 @@
 ﻿using TimeUtil.BussinesLogic;
 using TimeUtil.sharedClasses;
 
-string path = @"C:\Users\Matt\OneDrive - SERC\workign from home\HR\calendare exports\calendar exports\Calendar export May-July 21.CSV";
+string filePath = @"C:\Users\Matt\OneDrive - SERC\workign from home\HR\calendare exports\calendar exports\Calendar export May-July 21.CSV";
 
 
-using FileStream fs = new FileStream(path, FileMode.Open);
+using FileStream fs = new FileStream(filePath, FileMode.Open);
 
 OutlookCalendar cal = OutlookCalendarCSVParser.Parse(fs);
 
