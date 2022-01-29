@@ -9,7 +9,7 @@ using FileStream fs = new FileStream(filePath, FileMode.Open);
 OutlookCalendar cal = await OutlookCalendarCSVParser.Parse(fs);
 
 
-Event[]? events = cal.Events.Where(x => x.Categories == "Business Services Delivery" || x.Categories == "CPD").ToArray();
+//Event[]? events = cal.Events.Where(x => x.Categories == "Business Services Delivery" || x.Categories == "CPD").ToArray();
 
 
 
@@ -23,6 +23,6 @@ Console.WriteLine($"\nTotal hours: {cal.Events.Sum(x => x.Eventduration.TotalHou
 
 Console.WriteLine($"\nTotal hours new: {cal.Total().TotalHours}");
 
-Console.WriteLine($"\nTotal hours control: {events.Sum(x=> x.Eventduration.TotalHours)}");
+//Console.WriteLine($"\nTotal hours control: {events.Sum(x=> x.Eventduration.TotalHours)}");
 
 Console.WriteLine($"\nTotal hours new: {cal.Total(new string[] { "Business Services Delivery", "CDP" }).TotalHours}");

@@ -1,4 +1,6 @@
-﻿namespace TimeUtil.SharedClasses
+﻿using System.Linq;
+
+namespace TimeUtil.SharedClasses
 {
     public class OutlookCalendar
     {
@@ -11,6 +13,9 @@
 
         public IEnumerable<Event> Events => _events;
 
+        private IEnumerable<string>? _categories;
+        public IEnumerable<string> Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct();
+
         public TimeSpan Total()
         {
             return Total(_events);
@@ -18,7 +23,7 @@
 
         public TimeSpan Total(IEnumerable<string> categories)
         {
-            Event[] events = _events.Where(ev => categories.Contains(ev.Categories)).ToArray();
+            Event[] events = _events.Where(ev => categories.Any(c => ev.Categories.Contains(c))).ToArray();
 
             return Total(events);
         }
@@ -33,6 +38,13 @@
             }
 
             return total;
+        }
+
+        public double TimeUtilisationPercentage(double targetHours, IEnumerable<string> categories)
+        {
+            double totalHours = Total(categories).TotalHours;
+            double timeUtilPercentage = totalHours / targetHours * 100;
+            return timeUtilPercentage;
         }
     }
 }

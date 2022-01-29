@@ -1,72 +1,50 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-<MudCard Style="max-width: 500px;">
-    <MudCardHeader>
-        <MudText Typo="Typo.h4">Find out about your time</MudText>
-    </MudCardHeader>
-    <MudCardContent>
-        <MudForm @bind-IsValid="@formValid">
-            <div class="mb-3">
-                <MudText Class="mb-2" Typo="Typo.h5">Upload a Outlook calendar CSV export</MudText>
-                <InputFile id="fileInput" OnChange="UploadFile" hidden="hidden" />
-                <MudButton Class="mb-2" HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Secondary"
-                           StartIcon="@Icons.Filled.CloudUpload"
-                           for="fileInput">
-                    Upload File
-                </MudButton>
-                @if (file is not null)
-                {
-                    <MudButton Variant="Variant.Filled"
-                           Color="Color.Error"
-                           StartIcon="@Icons.Filled.DeleteForever"
-                           Class="ml-2 mb-2"
-                           OnClick="RemoveFile">
-                        Remove File
-                    </MudButton>
 
-                    <MudText>File called: <strong>@file.Name</strong> has been uploaded.</MudText>
-                }
-            </div>
-            <div>
-                <MudText Class="mb-2" Typo="Typo.h5">
-                    Categories
-                </MudText>
-                <MudText Class="mb-2" Typo="Typo.subtitle1">
-                    Add any categories that are to be counted towards Time.
-                    If none are entered all events in the calender will be counted.
-                </MudText>
-                @for (int i = 0; i < categories.Count; i++)
-                {
-                    int j = i; // a local copy to solve the capture problem
+<MudForm @bind-IsValid="@formValid">
 
-                    <MudTextField @bind-Value="categories[j]"
-                              Label="category"
-                              Variant="Variant.Outlined"
-                              Adornment="Adornment.End"
-                              AdornmentIcon="@Icons.Filled.DeleteForever"
-                              OnAdornmentClick="()=> RemoveCategory(categories[j])"
-                              Class="my-2" />
-                }
-                <MudButton Color="Color.Secondary"
-                           Variant="Variant.Filled"
-                           StartIcon="@Icons.Filled.Add"
-                           OnClick="AddCategoryInput">
-                    Add Categoriy
-                </MudButton>
-            </div>
-        </MudForm>
-    </MudCardContent>
-    <MudCardActions>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formValid)" Class="ml-auto" OnClick="HandleSubmit">Submit</MudButton>
-    </MudCardActions>
-</MudCard>
+    <MudText Typo="Typo.subtitle1">
+        @if (file is null)
+        {
+            <text>Upload an Outloock Calender CSV</text>
+            <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="Color.Secondary"
+                   StartIcon="@Icons.Filled.CloudUpload"
+                   Size="Size.Small"
+                   Class="ml-2"
+                   for="fileInput">
+                Upload File
+            </MudButton>
+        }
+        else
+        {
+            <text>You have uploaded a file called: <strong>@file.Name</strong></text> 
+            <MudButton Variant="Variant.Filled"
+                   Color="Color.Error"
+                   StartIcon="@Icons.Filled.DeleteForever"
+                   Class="ml-2"
+                   Size="Size.Small"
+                   OnClick="RemoveFile">
+                Remove File
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled"
+                   Size="Size.Small"
+                   Color="Color.Primary" Disabled="@(!formValid)"
+                   StartIcon="@Icons.Filled.Calculate"
+                   Class="ml-2" OnClick="HandleSubmit">Process</MudButton>
+        }
+    </MudText>
+
+    <InputFile id="fileInput" OnChange="UploadFile" hidden="hidden" />
+
+</MudForm>
 
 
 @code {
     [Parameter, EditorRequired] public EventCallback<InputFormSubmitArgs> OnSubmit { get; set; }
+
     IBrowserFile? file;
-    List<string?> categories = new();
     bool formValid;
 
     private void UploadFile(InputFileChangeEventArgs e)
@@ -79,21 +57,11 @@
         file = null;
     }
 
-    private void AddCategoryInput()
-    {
-        categories.Add(string.Empty);
-    }
-
-    private void RemoveCategory(string? category)
-    {
-        categories.Remove(category);
-    }
-
     private Task HandleSubmit()
     {
         if (file is not null)
         {
-            InputFormSubmitArgs inputFormSubmitArgs = new(file, categories);
+            InputFormSubmitArgs inputFormSubmitArgs = new(file);
 
             return OnSubmit.InvokeAsync(inputFormSubmitArgs);
         }

@@ -1,14 +1,12 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-html, body {
+﻿/*html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+}*/
 
 h1:focus {
     outline: none;
 }
 
-a, .btn-link {
+/*a, .btn-link {
     color: #0071c1;
 }
 
@@ -21,7 +19,7 @@ a, .btn-link {
 .content {
     padding-top: 1.1rem;
 }
-
+*/
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
@@ -62,3 +60,8 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+.h-100 {
+    height: 100%
+}

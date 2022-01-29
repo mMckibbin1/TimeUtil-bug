@@ -7,7 +7,8 @@ public class Event
     public DateOnly EndDate { get; private set; }
     public TimeOnly StartTime { get; private set; }
     public TimeOnly EndTime { get; private set; }
-    public string? Categories { get; private set; }
+    public IEnumerable<string> Categories { get; private set; } = Enumerable.Empty<string>();
+    public bool UnCategoriesed => Categories.Any();
 
     private TimeSpan? _Eventduration;
     public TimeSpan Eventduration
@@ -16,14 +17,17 @@ public class Event
         {
             if (!_Eventduration.HasValue)
             {
-                DateTime startDate = StartDate.ToDateTime(StartTime);
-                DateTime endDate = EndDate.ToDateTime(EndTime);
-
-                TimeSpan dif = endDate - startDate;
+                TimeSpan dif = FullEndDateTime - FullStartDateTime;
 
                 _Eventduration = dif;
             }
             return _Eventduration.Value;
         }
     }
+    private DateTime? _fullStartDateTime;
+    private DateTime? _fullEndDateTime;
+    public DateTime FullStartDateTime => _fullStartDateTime ??= StartDate.ToDateTime(StartTime);
+    public DateTime FullEndDateTime => _fullEndDateTime ??= EndDate.ToDateTime(EndTime);
+
+
 }

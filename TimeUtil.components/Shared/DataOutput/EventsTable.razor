@@ -1,0 +1,76 @@
+﻿@using TimeUtil.SharedClasses
+
+<MudTable AllowUnsorted="false" RowsPerPage="15" Items="@Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Events</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Event, object?>(x=> x.EventSubject)">
+                Event Subject
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                               SortBy="new Func<Event, object>(x=> x.FullStartDateTime)">
+                Start Date
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Event, object>(x=> x.FullEndDateTime)">
+                End Date
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<Event, object>(x=> x.Eventduration)">
+                Event duration
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>Event Categories</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Event Subject">@context.EventSubject</MudTd>
+        <MudTd DataLabel="Start Date">@context.StartDate | @context.StartTime</MudTd>
+        <MudTd DataLabel="End Date">@context.EndDate | @context.EndTime</MudTd>
+        <MudTd DataLabel="Event duration">@context.Eventduration</MudTd>
+        <MudTd DataLabel="Event duration">
+            <ul>
+                @foreach (string cat in context.Categories)
+                {
+                    <li>
+                        @cat
+                    </li>
+                }
+            </ul>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    [Parameter, EditorRequired] public IEnumerable<Event> Events { get; set; } = default!;
+
+    private string filterString = string.Empty;
+
+    private bool FilterEvents(Event calEvent)
+    {
+        if (string.IsNullOrWhiteSpace(filterString))
+        {
+            return true;
+        }
+        if (calEvent.EventSubject is not null && calEvent.EventSubject.Contains(filterString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    protected override void OnParametersSet()
+    {
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Events, nameof(Events));
+    }
+}

@@ -4,13 +4,11 @@ namespace TimeUtil.Components.Types
 {
     public class InputFormSubmitArgs
     {
-        public InputFormSubmitArgs(IBrowserFile file, IEnumerable<string?> categories)
+        public InputFormSubmitArgs(IBrowserFile file)
         {
             File = file;
-            Categories = categories;
         }
 
         public IBrowserFile File { get; }
-        public IEnumerable<string?> Categories { get; }
     }
 }

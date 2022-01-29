@@ -38,7 +38,7 @@ namespace TimeUtil.BussinesLogic
             Map(m => m.EndTime).Name("End Time");
             Map(m => m.StartDate).Name("Start Date");
             Map(m => m.EndDate).Name("Start Date");
-            Map(m => m.Categories).Name("Categories");
+            Map(m => m.Categories).Name("Categories").TypeConverter(new CategoiresConverter());
         }
     }
 }

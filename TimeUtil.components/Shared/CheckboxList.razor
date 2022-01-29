@@ -1,0 +1,39 @@
+﻿@foreach (var category in Items)
+{
+    <MudListItem @key="category">
+        <MudCheckBox T="bool"
+                 Checked="@(CheckedItems.Contains(category))"
+                 CheckedChanged="@((isChecked)=>CheckChanged(category, isChecked))"
+                 Color="Color.Secondary"
+                 Label="@category">
+        </MudCheckBox>
+    </MudListItem>
+
+}
+
+@code {
+    [Parameter, EditorRequired] public IEnumerable<string> Items { get; set; } = default!;
+
+    [Parameter] public List<string> CheckedItems { get; set; } = new();
+    [Parameter] public EventCallback<List<string>> CheckedItemsChanged { get; set; }
+
+    private async Task CheckChanged(string category, bool isChecked)
+    {
+        if (isChecked)
+        {
+            CheckedItems.Add(category);
+        }
+        else
+        {
+            CheckedItems.Remove(category);
+        }
+
+        await CheckedItemsChanged.InvokeAsync(CheckedItems);
+
+    }
+
+    protected override void OnParametersSet()
+    {
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Items, nameof(Items));
+    }
+}

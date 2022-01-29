@@ -1,38 +1,73 @@
 ﻿@page "/"
 
+@using Microsoft.AspNetCore.Components.Forms
 @using TimeUtil.SharedClasses
 @using TimeUtil.BussinesLogic
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Time Utilisation</PageTitle>
 
-<div style="display: flex; justify-content: center;">
-    <InputForm OnSubmit="HandleSubmit" />
-</div>
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="pa-3">
+            @if (cal is null)
+            {
+                <InputForm OnSubmit="@HandleSubmit" />
+            }
+            else
+            {
+                <MudText Typo="Typo.subtitle1">
+                    File: <strong>@_file!.Name</strong> is currently being displayed
+                    <MudButton Variant="Variant.Filled"
+                           Color="Color.Info"
+                           StartIcon="@Icons.Filled.RestartAlt"
+                           Class="ml-2"
+                           Size="Size.Small"
+                           OnClick="Reset">
+                        Reset
+                    </MudButton>
+                </MudText>
+            }
+        </MudPaper>
 
-@if(cal is not null && categoires is not null)
-{
-    <div>Total hours: @cal.Total().TotalHours</div>
+    </MudItem>
+    <MudItem xs="12">
+        @if (processing)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+        else if (cal is not null)
+        {
+            <DataOutputView calendar="@cal" />
+        }
+    </MudItem>
+</MudGrid>
 
-    <div>Total hours with categories: @cal.Total(categoires).TotalHours</div>
-}
 
 
 @code {
     private OutlookCalendar? cal;
-    private IEnumerable<string?>? categoires;
+
+    private bool processing;
+    private IBrowserFile? _file;
 
     private async Task HandleSubmit(InputFormSubmitArgs input)
     {
-        categoires = input.Categories;
-
-        await using Stream stream = input.File.OpenReadStream(input.File.Size);
-        using StreamContent streamContent = new(stream);
-        cal = await OutlookCalendarCSVParser.Parse(await streamContent.ReadAsStreamAsync());
-
-        foreach(var ev in cal.Events)
+        if (_file != input.File)
         {
-            Console.WriteLine(ev.Categories);
+            _file = input.File;
+            processing = true;
+            await using Stream stream = input.File.OpenReadStream(input.File.Size);
+            using StreamContent streamContent = new(stream);
+            cal = await OutlookCalendarCSVParser.Parse(await streamContent.ReadAsStreamAsync());
+
+            processing = false;
         }
+    }
+
+    private void Reset()
+    {
+        cal = null;
+        _file = null;
     }
 
 }
