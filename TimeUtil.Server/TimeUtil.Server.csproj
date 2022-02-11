@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\sharedClasses\TimeUtil.SharedClasses.csproj" />
     <ProjectReference Include="..\TimeUtil.BlazorWasmClient\TimeUtil.BlazorWasmClient.csproj" />
   </ItemGroup>
 
