@@ -1,4 +1,4 @@
-﻿namespace TimeUtil.SharedClasses;
+﻿namespace TimeUtil.Shared;
 
 public class Event
 {

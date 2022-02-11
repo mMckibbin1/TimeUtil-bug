@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\sharedClasses\TimeUtil.SharedClasses.csproj" />
+    <ProjectReference Include="..\TimeUtil.Shared\TimeUtil.Shared.csproj" />
   </ItemGroup>
 
 </Project>

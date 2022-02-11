@@ -1,6 +1,5 @@
-﻿using System.Linq;
-
-namespace TimeUtil.SharedClasses
+﻿
+namespace TimeUtil.Shared
 {
     public class OutlookCalendar
     {

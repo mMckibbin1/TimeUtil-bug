@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BussinesLogic\TimeUtil.BussinesLogic.csproj" />
-    <ProjectReference Include="..\sharedClasses\TimeUtil.SharedClasses.csproj" />
+    <ProjectReference Include="..\TimeUtil.Shared\TimeUtil.Shared.csproj" />
   </ItemGroup>
 
 </Project>

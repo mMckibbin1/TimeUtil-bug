@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
-using TimeUtil.SharedClasses;
+using TimeUtil.Shared;
 
 namespace TimeUtil.BussinesLogic
 {
