@@ -1,0 +1,28 @@
+﻿<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled">Opps Something went wrong</MudAlert>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        @if (Exception is not null)
+        {
+            <div>Exception type: @Exception.GetType().Name with the message: @Exception.Message</div>
+        }
+        else
+        {
+            <MudText>I'm not sure what happend...</MudText>
+        }
+    </MudCardContent>
+    @if (Reset.HasDelegate)
+    {
+        <MudCardActions>
+            <MudButton OnClick="@Reset" Variant="Variant.Text" Color="Color.Primary">Reset</MudButton>
+        </MudCardActions>
+    }
+</MudCard>
+
+@code {
+    [Parameter] public Exception? Exception { get; set; }
+    [Parameter] public EventCallback Reset { get; set; }
+}

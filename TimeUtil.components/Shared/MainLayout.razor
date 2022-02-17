@@ -12,7 +12,24 @@
     </MudAppBar>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
-            @Body
+            <ErrorBoundary @ref="@errorBoundary">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <ErrorDisplay Exception="@context" Reset="@Reset" />
+                </ErrorContent>
+            </ErrorBoundary>
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
+
+@code {
+    private ErrorBoundary? errorBoundary;
+
+    private void Reset()
+    {
+        errorBoundary?.Recover();
+    }
+}

@@ -7,7 +7,7 @@ namespace TimeUtil.BussinesLogic
 {
     public static class OutlookCalendarCSVParser
     {
-        private static readonly CsvConfiguration configuration = new(CultureInfo.CurrentCulture)
+        private static readonly CsvConfiguration configuration = new(new CultureInfo("en-GB"))
         {
             IncludePrivateMembers = true,
         };

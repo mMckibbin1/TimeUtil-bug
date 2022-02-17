@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{89E1AD30-E550-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUtil.Server", "TimeUtil.Server\TimeUtil.Server.csproj", "{D9876BA9-3961-454A-963E-3A07357E1293}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeUtil.Shared", "TimeUtil.Shared\TimeUtil.Shared.csproj", "{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUtil.Shared", "TimeUtil.Shared\TimeUtil.Shared.csproj", "{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
