@@ -1,0 +1,62 @@
+﻿<MudCard Class="pa-3 h-100">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="@Typo.h5">
+                Date Range
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudDatePicker @ref="_startPicker"
+                       MaxDate="endDate.HasValue? endDate.Value.AddDays(-1) : null"
+                       Label="Start date"
+                       @bind-Date="startDate">
+            <PickerActions>
+                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _startPicker.Clear())">Clear</MudButton>
+                <MudButton OnClick="@(() => _startPicker.Close(false))">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="@(() => _startPicker.Close())">Ok</MudButton>
+            </PickerActions>
+        </MudDatePicker>
+        <MudDatePicker @ref="_endPicker"
+                       MinDate="startDate.HasValue? startDate.Value.AddDays(+1) : null"
+                       Label="End date"
+                       @bind-Date="endDate">
+            <PickerActions>
+                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _endPicker.Clear())">Clear</MudButton>
+                <MudButton OnClick="@(() => _endPicker.Close(false))">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="@(() => _endPicker.Close())">Ok</MudButton>
+            </PickerActions>
+        </MudDatePicker>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter] public EventCallback<DateTime?> OnStartDateChanged { get; set; }
+    [Parameter] public EventCallback<DateTime?> OnEndDateChanged { get; set; }
+
+    private MudDatePicker _startPicker;
+    private MudDatePicker _endPicker;
+
+    private DateTime? _startDate = null;
+    private DateTime? startDate
+    {
+        get => _startDate;
+        set
+        {
+            _startDate = value;
+            _ = OnStartDateChanged.InvokeAsync(_startDate);
+        }
+    }
+
+    private DateTime? _endDate = null;
+    private DateTime? endDate
+    {
+        get => _endDate;
+        set
+        {
+            _endDate = value;
+            _ = OnEndDateChanged.InvokeAsync(_endDate);
+        }
+    }
+
+    }

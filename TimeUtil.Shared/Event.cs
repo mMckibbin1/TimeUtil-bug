@@ -8,7 +8,6 @@ public class Event
     public TimeOnly StartTime { get; private set; }
     public TimeOnly EndTime { get; private set; }
     public IEnumerable<string> Categories { get; private set; } = Enumerable.Empty<string>();
-    public bool UnCategoriesed => Categories.Any();
 
     private TimeSpan? _Eventduration;
     public TimeSpan Eventduration

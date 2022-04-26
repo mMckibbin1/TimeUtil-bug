@@ -4,34 +4,46 @@ namespace TimeUtil.Shared
     public class OutlookCalendar
     {
         private readonly Event[] _events;
+        private readonly Dictionary<string, IEnumerable<Event>> _eventLookup;
 
         public OutlookCalendar(IEnumerable<Event> events)
         {
             _events = events.ToArray();
+
+            _eventLookup = PopulateEventLookup();
         }
 
         public IEnumerable<Event> Events => _events;
-
         private IEnumerable<string>? _categories;
         public IEnumerable<string> Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct();
 
-        public TimeSpan Total()
+        private Dictionary<string, IEnumerable<Event>> PopulateEventLookup()
         {
-            return Total(_events);
+            Dictionary<string, IEnumerable<Event>> eventLookup = new();
+
+            foreach (var category in Categories)
+            {
+                eventLookup.Add(category, _events.Where(ev => ev.Categories.Contains(category)));
+            }
+
+            return eventLookup;
         }
 
-        public TimeSpan Total(IEnumerable<string> categories)
+        public TimeSpan TotalEventTimeSpan()
         {
-            Event[] events = _events.Where(ev => categories.Any(c => ev.Categories.Contains(c))).ToArray();
-
-            return Total(events);
+            return TotalEventTimeSpan(_events);
         }
 
-        private static TimeSpan Total(Event[] events)
+        public TimeSpan TotalEventTimeSpan(IEnumerable<string> categories)
+        {
+            return TotalEventTimeSpan(FilterEvents(categories).ToArray());
+        }
+
+        public TimeSpan TotalEventTimeSpan(IList<Event> events)
         {
             TimeSpan total = TimeSpan.Zero;
 
-            for (int i = 0; i < events.Length; i++)
+            for (int i = 0; i < events.Count; i++)
             {
                 total += events[i].Eventduration;
             }
@@ -39,11 +51,53 @@ namespace TimeUtil.Shared
             return total;
         }
 
-        public double TimeUtilisationPercentage(double targetHours, IEnumerable<string> categories)
+        public double TimeUtilisationPercentage(double targetHours, IEnumerable<Event> events)
         {
-            double totalHours = Total(categories).TotalHours;
+            double totalHours = TotalEventTimeSpan(events.ToArray()).TotalHours;
             double timeUtilPercentage = totalHours / targetHours * 100;
             return timeUtilPercentage;
+        }
+
+        public IEnumerable<Event> FilterEvents(IEnumerable<string> categories)
+        {
+            return FilterEvents(categories, null, null);
+        }
+
+        public IEnumerable<Event> FilterEvents(DateOnly? startDate = null, DateOnly? endDate = null)
+        {
+            return FilterEvents(null, startDate, endDate);
+        }
+
+        public IEnumerable<Event> FilterEvents(IEnumerable<string>? categories = null, DateOnly? startDate = null, DateOnly? endDate = null)
+        {
+            IEnumerable<Event> local = categories is null ? _events : FilterEventsByCategories(categories);
+
+            if (startDate is not null)
+            {
+                local = local.Where(e => e.StartDate >= startDate);
+            }
+
+            if (endDate is not null)
+            {
+                local = local.Where(e => e.EndDate <= endDate);
+            }
+
+            return local.Distinct();
+        }
+
+        private IEnumerable<Event> FilterEventsByCategories(IEnumerable<string> categories)
+        {
+            List<Event> events = new();
+
+            foreach (var category in categories)
+            {
+                if (_eventLookup.TryGetValue(category, out var value))
+                {
+                    events.AddRange(value);
+                }
+            }
+
+            return events;
         }
     }
 }

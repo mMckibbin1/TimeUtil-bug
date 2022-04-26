@@ -1,70 +1,68 @@
 ﻿@using TimeUtil.Shared
 
-<MudGrid>
-    <MudItem xs="12">
-        <h3>Results</h3>
-    </MudItem>
-    <MudItem xs="3">
-        <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@calendar.Categories" />
-    </MudItem>
-    <MudItem xs="9">
-        <MudGrid>
-            <MudItem xs="6">
-                <MudCard Class="pa-3 h-100">
-                    <MudList>
-                        <MudListItem>
-                            <MudText Typo="@Typo.h5">
-                                Total Hours
-                            </MudText>
-                        </MudListItem>
-                        <MudListItem Text="@($"The total hours for all events in the calendar: {Math.Round(calendar.Total().TotalHours,2)}")">
-                        </MudListItem>
-                        <MudListItem Text="@($"The total hours for all selected categories: {Math.Round(calendar.Total(SelectedCategories).TotalHours,2)}")">
-                        </MudListItem>
-                    </MudList>
-                </MudCard>
+<MudBreakpointProvider>
+    <MudGrid>
+        <MudItem xs="12">
+            <h1>Results</h1>
+        </MudItem>
+        <MudItem md="4" lg="3" xl="2">
+            <MudGrid>
+                <MudItem xs="12">
+                    <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@calendar.Categories" />
+                </MudItem>
+                <MudItem xs="12">
+                    <DateRangeCard OnStartDateChanged="startDatechanged" OnEndDateChanged="endDatechanged" />
+                </MudItem>
+                <MudHidden Breakpoint="Breakpoint.LgAndDown" Invert="true">
+                    @*Total Hours Card*@
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <TotalHoursCard Calendar="calendar" Events="events" />
+                            </MudItem>
+                            @*Time Until*@
+                            <MudItem xs="12">
+                                <TimeUntilCard Calendar="@calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudHidden>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" md="8" lg="9" xl="8">
+            <MudCard>
+                <EventsTable Events="@events" />
+            </MudCard>
+        </MudItem>
+        <MudHidden Breakpoint="Breakpoint.Xl" Invert="true">
+            <MudItem xl="2">
+                <MudGrid>
+                    @*Total Hours Card*@
+                    <MudItem xs="12">
+                        <TotalHoursCard Calendar="calendar" Events="events" />
+                    </MudItem>
+                    @*Time Until*@
+                    <MudItem xs="12">
+                        <TimeUntilCard Calendar="@calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                    </MudItem>
+                </MudGrid>
             </MudItem>
-            <MudItem xs="6">
-                <MudCard Class="pa-3 h-100">
-                    <MudList>
-                        <MudListItem>
-                            <MudText Typo="@Typo.h5">
-                                Time Utilisation
-                            </MudText>
-                        </MudListItem>
-                        <MudListItem>
-                            <MudNumericField @bind-Value="targetHours" Label="Target Hours" Format="F2" Variant="Variant.Outlined" Min="0" />
-                        </MudListItem>
-
-                        <MudDivider />
-                        <MudListItem>
-                            Time Utilisation: @Math.Round(calendar.TimeUtilisationPercentage(targetHours, _selectedCategories),2)%
-                        </MudListItem>
-                    </MudList>
-
-                </MudCard>
-            </MudItem>
-            <MudItem xs="12">
-                <MudCard>
-                    <EventsTable Events="@events" />
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    </MudItem>
-</MudGrid>
-
+        </MudHidden>
+    </MudGrid>
+</MudBreakpointProvider>
 
 @code {
     [Parameter, EditorRequired]
     public OutlookCalendar calendar { get; set; } = default!;
 
-    private const double DefaultTargetHours = 120;
+    private DateOnly? startDate = null;
+    private DateOnly? endDate = null;
 
-    private double targetHours = DefaultTargetHours;
+    private const double DefaultTargetHours = 120;
 
     private OutlookCalendar? _calendar;
 
-    private List<Event> events = new();
+    private IEnumerable<Event> events = Enumerable.Empty<Event>();
 
     private List<string> _selectedCategories = new();
 
@@ -80,15 +78,37 @@
 
     private void calcEventsList()
     {
-        if (_selectedCategories.Count != calendar.Categories.Count())
+        events = calendar.FilterEvents(_selectedCategories, startDate, endDate);
+
+    }
+
+    private void startDatechanged(DateTime? dateTime)
+    {
+        if (dateTime.HasValue)
         {
-            events = calendar.Events.Where(x => x.Categories.Any(x => SelectedCategories.Contains(x))).ToList();
+            startDate = DateOnly.FromDateTime(dateTime.Value);
         }
         else
         {
-            events = calendar.Events.ToList();
+            startDate = null;
         }
 
+        calcEventsList();
+
+    }
+
+    private void endDatechanged(DateTime? dateTime)
+    {
+        if (dateTime.HasValue)
+        {
+            endDate = DateOnly.FromDateTime(dateTime.Value);
+        }
+        else
+        {
+            endDate = null;
+        }
+
+        calcEventsList();
     }
 
     protected override void OnParametersSet()

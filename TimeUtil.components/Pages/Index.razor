@@ -1,8 +1,11 @@
 ﻿@page "/"
 
+@inject ISnackbar Snackbar
+@inject IOutlookCalendarCSVParseService Parser
+
 @using Microsoft.AspNetCore.Components.Forms
 @using TimeUtil.Shared
-@using TimeUtil.BussinesLogic
+@using TimeUtil.Shared.Interfaces
 
 <PageTitle>Time Utilisation</PageTitle>
 
@@ -54,15 +57,27 @@
     {
         if (_file != input.File)
         {
-            _file = input.File;
-            processing = true;
-            await using Stream stream = input.File.OpenReadStream(input.File.Size);
-            using StreamContent streamContent = new(stream);
-            cal = await OutlookCalendarCSVParser.Parse(await streamContent.ReadAsStreamAsync());
-
-            processing = false;
+            try
+            {
+                _file = input.File;
+                processing = true;
+                await using Stream stream = input.File.OpenReadStream(input.File.Size);
+                using StreamContent streamContent = new(stream);
+                cal = await Parser.OutlookCalendar(await streamContent.ReadAsStreamAsync());
+            }
+            catch
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+                Snackbar.Add("There was an error when processing the CSV file. Please try a differnt file", Severity.Error);
+                Reset();
+            }
+            finally
+            {
+                processing = false;
+            }
         }
     }
+
 
     private void Reset()
     {

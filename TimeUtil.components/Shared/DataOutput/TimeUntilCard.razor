@@ -1,0 +1,47 @@
+﻿@using TimeUtil.Shared
+@inject IDialogService DialogService
+
+<MudCard Class="pa-3 h-100">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="@Typo.h5">
+                Time Utilisation
+            </MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton OnClick="onClick" Size="Size.Small" Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudList>
+        <MudListItem>
+            <MudNumericField @bind-Value="targetHours" Label="Target Hours" Format="F2" Variant="Variant.Outlined" Min="0" />
+        </MudListItem>
+
+        <MudDivider />
+        <MudListItem>
+            Time Utilisation: @Math.Round(Calendar.TimeUtilisationPercentage(targetHours, Events),2)%
+        </MudListItem>
+    </MudList>
+</MudCard>
+@code {
+
+    [Parameter, EditorRequired] public double DefaultTargetHours { get; set; }
+    [Parameter, EditorRequired] public IEnumerable<Event> Events { get; set; } = default!;
+
+    [Parameter, EditorRequired] public OutlookCalendar Calendar { get; set; } = default!;
+
+    private double targetHours;
+
+    protected override void OnInitialized()
+    {
+        targetHours = DefaultTargetHours;
+    }
+
+    private void onClick()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(HelpDialog.ContentText), "This is some help");
+        DialogService.Show<HelpDialog>("Simple Dialog", parameters, options);
+    }
+}

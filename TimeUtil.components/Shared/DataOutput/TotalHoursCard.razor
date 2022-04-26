@@ -1,0 +1,34 @@
+﻿@using TimeUtil.Shared
+@inject IDialogService DialogService
+
+<MudCard Class="pa-3 h-100">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="@Typo.h5">
+                Total Hours
+            </MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton OnClick="onClick" Size="Size.Small" Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudList>
+        <MudListItem Text="@($"All events: {Math.Round(Calendar.TotalEventTimeSpan().TotalHours,2)}")">
+        </MudListItem>
+        <MudListItem Text="@($"Selected categories: {Math.Round(Calendar.TotalEventTimeSpan(Events.ToArray()).TotalHours,2)}")">
+        </MudListItem>
+    </MudList>
+</MudCard>
+
+@code {
+    [Parameter, EditorRequired] public OutlookCalendar Calendar { get; set; } = default!;
+    [Parameter, EditorRequired] public IEnumerable<Event> Events { get; set; } = default!;
+
+    private void onClick()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(HelpDialog.ContentText), "This is some help");
+        DialogService.Show<HelpDialog>("Simple Dialog", parameters, options);
+    }
+}

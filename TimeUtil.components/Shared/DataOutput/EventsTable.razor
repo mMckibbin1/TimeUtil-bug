@@ -1,6 +1,6 @@
 ﻿@using TimeUtil.Shared
 
-<MudTable AllowUnsorted="false" RowsPerPage="15" Items="@Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
+<MudTable AllowUnsorted="false" RowsPerPage="25" Items="@Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Events</MudText>
         <MudSpacer />
@@ -37,10 +37,10 @@
         <MudTd DataLabel="Event duration">@context.Eventduration</MudTd>
         <MudTd DataLabel="Event duration">
             <ul>
-                @foreach (string cat in context.Categories)
+                @foreach (string category in context.Categories)
                 {
                     <li>
-                        @cat
+                        @category
                     </li>
                 }
             </ul>
