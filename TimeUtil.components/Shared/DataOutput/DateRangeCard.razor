@@ -8,23 +8,23 @@
     </MudCardHeader>
     <MudCardContent>
         <MudDatePicker @ref="_startPicker"
-                       MaxDate="endDate.HasValue? endDate.Value.AddDays(-1) : null"
+                       MaxDate="endDate?.AddDays(-1)"
                        Label="Start date"
                        @bind-Date="startDate">
             <PickerActions>
-                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _startPicker.Clear())">Clear</MudButton>
-                <MudButton OnClick="@(() => _startPicker.Close(false))">Cancel</MudButton>
-                <MudButton Color="Color.Primary" OnClick="@(() => _startPicker.Close())">Ok</MudButton>
+                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _startPicker?.Clear())">Clear</MudButton>
+                <MudButton OnClick="@(() => _startPicker?.Close(false))">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="@(() => _startPicker?.Close())">Ok</MudButton>
             </PickerActions>
         </MudDatePicker>
         <MudDatePicker @ref="_endPicker"
-                       MinDate="startDate.HasValue? startDate.Value.AddDays(+1) : null"
+                       MinDate="startDate?.AddDays(1)"
                        Label="End date"
                        @bind-Date="endDate">
             <PickerActions>
-                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _endPicker.Clear())">Clear</MudButton>
-                <MudButton OnClick="@(() => _endPicker.Close(false))">Cancel</MudButton>
-                <MudButton Color="Color.Primary" OnClick="@(() => _endPicker.Close())">Ok</MudButton>
+                <MudButton Class="mr-auto align-self-start" OnClick="@(() => _endPicker?.Clear())">Clear</MudButton>
+                <MudButton OnClick="@(() => _endPicker?.Close(false))">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="@(() => _endPicker?.Close())">Ok</MudButton>
             </PickerActions>
         </MudDatePicker>
     </MudCardContent>
@@ -34,8 +34,8 @@
     [Parameter] public EventCallback<DateTime?> OnStartDateChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> OnEndDateChanged { get; set; }
 
-    private MudDatePicker _startPicker;
-    private MudDatePicker _endPicker;
+    private MudDatePicker? _startPicker;
+    private MudDatePicker? _endPicker;
 
     private DateTime? _startDate = null;
     private DateTime? startDate

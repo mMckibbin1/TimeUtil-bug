@@ -11,7 +11,7 @@
                     <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@calendar.Categories" />
                 </MudItem>
                 <MudItem xs="12">
-                    <DateRangeCard OnStartDateChanged="startDatechanged" OnEndDateChanged="endDatechanged" />
+                    <DateRangeCard OnStartDateChanged="StartDatechanged" OnEndDateChanged="EndDatechanged" />
                 </MudItem>
                 <MudHidden Breakpoint="Breakpoint.LgAndDown" Invert="true">
                     @*Total Hours Card*@
@@ -61,28 +61,26 @@
     private const double DefaultTargetHours = 120;
 
     private OutlookCalendar? _calendar;
-
     private IEnumerable<Event> events = Enumerable.Empty<Event>();
 
     private List<string> _selectedCategories = new();
-
     private List<string> SelectedCategories
     {
         get => _selectedCategories;
         set
         {
             _selectedCategories = value;
-            calcEventsList();
+            CalcEventsList();
         }
     }
 
-    private void calcEventsList()
+    private void CalcEventsList()
     {
         events = calendar.FilterEvents(_selectedCategories, startDate, endDate);
 
     }
 
-    private void startDatechanged(DateTime? dateTime)
+    private void StartDatechanged(DateTime? dateTime)
     {
         if (dateTime.HasValue)
         {
@@ -93,11 +91,11 @@
             startDate = null;
         }
 
-        calcEventsList();
+        CalcEventsList();
 
     }
 
-    private void endDatechanged(DateTime? dateTime)
+    private void EndDatechanged(DateTime? dateTime)
     {
         if (dateTime.HasValue)
         {
@@ -108,7 +106,7 @@
             endDate = null;
         }
 
-        calcEventsList();
+        CalcEventsList();
     }
 
     protected override void OnParametersSet()
@@ -118,7 +116,7 @@
         {
             _calendar = calendar;
             _selectedCategories = calendar.Categories.ToList();
-            calcEventsList();
+            CalcEventsList();
         }
     }
 
