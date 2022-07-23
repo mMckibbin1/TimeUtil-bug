@@ -14,4 +14,8 @@
     <ProjectReference Include="..\TimeUtil.BlazorWasmClient\TimeUtil.BlazorWasmClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

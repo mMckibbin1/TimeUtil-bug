@@ -28,12 +28,23 @@
 //Console.WriteLine($"\nTotal hours new: {cal.Total(new string[] { "Business Services Delivery", "CDP" }).TotalHours}");
 
 using System.Globalization;
+using System.Text.Json;
 
-var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+//var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
-foreach (var c in cultures)
-{
-    Console.WriteLine($"{c.DisplayName} ({c.DateTimeFormat.ShortDatePattern})");
-}
-Console.WriteLine(CultureInfo.CurrentCulture.DisplayName);
-Console.ReadKey();
+//foreach (var c in cultures)
+//{
+//    Console.WriteLine($"{c.DisplayName} ({c.DateTimeFormat.ShortDatePattern})");
+//}
+//Console.WriteLine(CultureInfo.CurrentCulture.DisplayName);
+//Console.ReadKey();
+
+DateOnly DateOnly = DateOnly.FromDateTime(DateTime.Now);
+
+string json = JsonSerializer.Serialize(DateOnly);
+
+Console.WriteLine(json);
+
+DateOnly dateOnly1 = JsonSerializer.Deserialize<DateOnly>(json);
+
+Console.WriteLine(dateOnly1);

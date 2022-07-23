@@ -1,12 +1,25 @@
-﻿namespace TimeUtil.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace TimeUtil.Shared;
 
 public class Event
 {
+    [JsonInclude]
     public string? EventSubject { get; private set; }
+
+    [JsonInclude]
     public DateOnly StartDate { get; private set; }
+
+    [JsonInclude]
     public DateOnly EndDate { get; private set; }
+
+    [JsonInclude]
     public TimeOnly StartTime { get; private set; }
+
+    [JsonInclude]
     public TimeOnly EndTime { get; private set; }
+
+    [JsonInclude]
     public IEnumerable<string> Categories { get; private set; } = Enumerable.Empty<string>();
 
     private TimeSpan? _Eventduration;

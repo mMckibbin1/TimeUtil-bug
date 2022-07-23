@@ -6,7 +6,7 @@ namespace TimeUtil.BlazorWasmClient.Services
 {
     internal class OutlookCSVParseService : IOutlookCalendarCSVParseService
     {
-        public Task<OutlookCalendar> OutlookCalendar(Stream data)
+        public Task<OutlookCalendar> ParseOutlookCalendar(Stream data)
         {
             return OutlookCalendarCSVParser.Parse(data);
         }

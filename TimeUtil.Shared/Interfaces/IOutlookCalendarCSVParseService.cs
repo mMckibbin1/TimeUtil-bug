@@ -2,6 +2,6 @@
 {
     public interface IOutlookCalendarCSVParseService
     {
-        Task<OutlookCalendar> OutlookCalendar(Stream data);
+        Task<OutlookCalendar> ParseOutlookCalendar(Stream data);
     }
 }

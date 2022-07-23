@@ -10,6 +10,6 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddTimeUtilComponents();
-builder.Services.AddSingleton<IOutlookCalendarCSVParseService, OutlookCSVParseService>();
+builder.Services.AddSingleton<IOutlookCalendarCSVParseService, OutlookCSVParseJS>();
 
 await builder.Build().RunAsync();
