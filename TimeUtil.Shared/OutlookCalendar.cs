@@ -5,6 +5,8 @@ namespace TimeUtil.Shared
     {
         private readonly Event[] _events;
         private readonly Dictionary<string, IEnumerable<Event>> _eventLookup;
+        private IEnumerable<string>? _categories; 
+        
 
         public OutlookCalendar(IEnumerable<Event> events)
         {
@@ -14,7 +16,6 @@ namespace TimeUtil.Shared
         }
 
         public IEnumerable<Event> Events => _events;
-        private IEnumerable<string>? _categories;
         public IEnumerable<string> Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct();
 
         private Dictionary<string, IEnumerable<Event>> PopulateEventLookup()
@@ -39,7 +40,7 @@ namespace TimeUtil.Shared
             return TotalEventTimeSpan(FilterEvents(categories).ToArray());
         }
 
-        public TimeSpan TotalEventTimeSpan(IList<Event> events)
+        public static TimeSpan TotalEventTimeSpan(IList<Event> events)
         {
             TimeSpan total = TimeSpan.Zero;
 
@@ -51,7 +52,7 @@ namespace TimeUtil.Shared
             return total;
         }
 
-        public double TimeUtilisationPercentage(double targetHours, IEnumerable<Event> events)
+        public static double TimeUtilisationPercentage(double targetHours, IEnumerable<Event> events)
         {
             double totalHours = TotalEventTimeSpan(events.ToArray()).TotalHours;
             double timeUtilPercentage = totalHours / targetHours * 100;

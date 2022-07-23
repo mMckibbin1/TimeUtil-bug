@@ -8,7 +8,7 @@
         <MudItem md="4" lg="3" xl="2">
             <MudGrid>
                 <MudItem xs="12">
-                    <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@calendar.Categories" />
+                    <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@Calendar.Categories" />
                 </MudItem>
                 <MudItem xs="12">
                     <DateRangeCard OnStartDateChanged="StartDatechanged" OnEndDateChanged="EndDatechanged" />
@@ -18,11 +18,11 @@
                     <MudItem xs="12">
                         <MudGrid>
                             <MudItem xs="12">
-                                <TotalHoursCard Calendar="calendar" Events="events" />
+                                <TotalHoursCard Calendar="Calendar" Events="events" />
                             </MudItem>
                             @*Time Until*@
                             <MudItem xs="12">
-                                <TimeUntilCard Calendar="@calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                                <TimeUntilCard Calendar="@Calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
                             </MudItem>
                         </MudGrid>
                     </MudItem>
@@ -39,11 +39,11 @@
                 <MudGrid>
                     @*Total Hours Card*@
                     <MudItem xs="12">
-                        <TotalHoursCard Calendar="calendar" Events="events" />
+                        <TotalHoursCard Calendar="Calendar" Events="events" />
                     </MudItem>
                     @*Time Until*@
                     <MudItem xs="12">
-                        <TimeUntilCard Calendar="@calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                        <TimeUntilCard Calendar="@Calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -53,7 +53,7 @@
 
 @code {
     [Parameter, EditorRequired]
-    public OutlookCalendar calendar { get; set; } = default!;
+    public OutlookCalendar Calendar { get; set; } = default!;
 
     private DateOnly? startDate = null;
     private DateOnly? endDate = null;
@@ -76,7 +76,7 @@
 
     private void CalcEventsList()
     {
-        events = calendar.FilterEvents(_selectedCategories, startDate, endDate);
+        events = Calendar.FilterEvents(_selectedCategories, startDate, endDate);
 
     }
 
@@ -111,11 +111,11 @@
 
     protected override void OnParametersSet()
     {
-        ThrowHelpers.ThrowIfRequiredPrameterNull(calendar, nameof(calendar));
-        if (_calendar != calendar)
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar, nameof(Calendar));
+        if (_calendar != Calendar)
         {
-            _calendar = calendar;
-            _selectedCategories = calendar.Categories.ToList();
+            _calendar = Calendar;
+            _selectedCategories = Calendar.Categories.ToList();
             CalcEventsList();
         }
     }

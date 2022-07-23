@@ -1,5 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -15,6 +22,8 @@ else
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
+
+app.UseResponseCompression();
 app.UseStaticFiles();
 
 app.UseRouting();

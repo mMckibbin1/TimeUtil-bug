@@ -15,7 +15,7 @@
     <MudList>
         <MudListItem Text="@($"All events: {Math.Round(Calendar.TotalEventTimeSpan().TotalHours,2)}")">
         </MudListItem>
-        <MudListItem Text="@($"Selected categories: {Math.Round(Calendar.TotalEventTimeSpan(Events.ToArray()).TotalHours,2)}")">
+        <MudListItem Text="@($"Selected categories: {Math.Round(OutlookCalendar.TotalEventTimeSpan(Events.ToArray()).TotalHours,2)}")">
         </MudListItem>
     </MudList>
 </MudCard>

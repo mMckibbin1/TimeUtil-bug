@@ -27,6 +27,4 @@ public class Event
     private DateTime? _fullEndDateTime;
     public DateTime FullStartDateTime => _fullStartDateTime ??= StartDate.ToDateTime(StartTime);
     public DateTime FullEndDateTime => _fullEndDateTime ??= EndDate.ToDateTime(EndTime);
-
-
 }
