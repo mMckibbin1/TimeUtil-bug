@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BussinesLogic\TimeUtil.BussinesLogic.csproj" />
     <ProjectReference Include="..\TimeUtil.components\TimeUtil.Components.csproj" />
   </ItemGroup>
 
