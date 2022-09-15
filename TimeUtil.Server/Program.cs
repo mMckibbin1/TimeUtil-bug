@@ -23,7 +23,11 @@ app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 
-app.UseResponseCompression();
+if (!app.Environment.IsDevelopment()) // response compression currently conflicts with dotnet watch browser reload
+{
+    app.UseResponseCompression();
+}
+
 app.UseStaticFiles();
 
 app.UseRouting();

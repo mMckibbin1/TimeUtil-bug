@@ -55,6 +55,8 @@
     [Parameter, EditorRequired]
     public OutlookCalendar Calendar { get; set; } = default!;
 
+    private bool _shouldRender = true;
+
     private DateOnly? startDate = null;
     private DateOnly? endDate = null;
 
@@ -77,7 +79,6 @@
     private void CalcEventsList()
     {
         events = Calendar.FilterEvents(_selectedCategories, startDate, endDate);
-
     }
 
     private void StartDatechanged(DateTime? dateTime)
@@ -92,7 +93,6 @@
         }
 
         CalcEventsList();
-
     }
 
     private void EndDatechanged(DateTime? dateTime)
@@ -111,13 +111,26 @@
 
     protected override void OnParametersSet()
     {
-        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar, nameof(Calendar));
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar);
+
         if (_calendar != Calendar)
         {
             _calendar = Calendar;
             _selectedCategories = Calendar.Categories.ToList();
             CalcEventsList();
         }
+        else
+        {
+            _shouldRender = false;
+        }
     }
 
+    protected override bool ShouldRender()
+    {
+        bool tempSHouldRender = _shouldRender;
+
+        _shouldRender = true;
+
+        return tempSHouldRender;
+    }
 }

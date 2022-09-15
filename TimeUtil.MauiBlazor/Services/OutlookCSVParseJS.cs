@@ -3,7 +3,7 @@ using System.Text.Json;
 using TimeUtil.Shared;
 using TimeUtil.Shared.Interfaces;
 
-namespace TimeUtil.BlazorWasmClient.Services
+namespace TimeUtil.MauiBlazor.Services
 {
     public class OutlookCSVParseJS : IOutlookCalendarCSVParseService
     {

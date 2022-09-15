@@ -5,7 +5,7 @@ namespace TimeUtil.Shared
     {
         private readonly Event[] _events;
         private readonly Dictionary<string, IEnumerable<Event>> _eventLookup;
-        private IEnumerable<string>? _categories; 
+        private string[]? _categories; 
         
 
         public OutlookCalendar(IEnumerable<Event> events)
@@ -16,7 +16,7 @@ namespace TimeUtil.Shared
         }
 
         public IEnumerable<Event> Events => _events;
-        public IEnumerable<string> Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct();
+        public string[] Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct().ToArray();
 
         private Dictionary<string, IEnumerable<Event>> PopulateEventLookup()
         {
@@ -83,7 +83,7 @@ namespace TimeUtil.Shared
                 local = local.Where(e => e.EndDate <= endDate);
             }
 
-            return local.Distinct();
+            return local;
         }
 
         private IEnumerable<Event> FilterEventsByCategories(IEnumerable<string> categories)
@@ -98,7 +98,7 @@ namespace TimeUtil.Shared
                 }
             }
 
-            return events;
+            return events.Distinct();
         }
     }
 }

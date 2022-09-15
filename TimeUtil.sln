@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUtil.Server", "TimeUtil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUtil.Shared", "TimeUtil.Shared\TimeUtil.Shared.csproj", "{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeUtil.MauiBlazor", "TimeUtil.MauiBlazor\TimeUtil.MauiBlazor.csproj", "{A60D432C-2567-44BD-B694-B62CA21FBC01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,12 @@ Global
 		{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB2DE9F6-3400-4DC4-9E5C-02AD8F979EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60D432C-2567-44BD-B694-B62CA21FBC01}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +62,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1EE1B6CF-83AA-4618-B679-42D1AF57B0B6} = {89E1AD30-E550-4A1A-9670-EB3D3145752E}
 		{8E28B2FB-03C0-4180-95E9-8813C848E2BF} = {89E1AD30-E550-4A1A-9670-EB3D3145752E}
+		{A60D432C-2567-44BD-B694-B62CA21FBC01} = {89E1AD30-E550-4A1A-9670-EB3D3145752E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {467DDF96-4E9D-4DDB-B379-CA255D44B64B}

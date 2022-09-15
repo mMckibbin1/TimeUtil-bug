@@ -65,11 +65,11 @@
                 using StreamContent streamContent = new(stream);
                 cal = await Parser.ParseOutlookCalendar(await streamContent.ReadAsStreamAsync());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine($"{e.GetType().Name} message: {e.Message}");
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-                Snackbar.Add("There was an error when processing the CSV file. Please try a differnt file", Severity.Error);
+                Snackbar.Add($"There was an error when processing the CSV file. Please try a differnt file {e.GetType().Name} message: {e.Message}", Severity.Error);
                 Reset();
             }
             finally
