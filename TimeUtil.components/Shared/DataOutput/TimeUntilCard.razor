@@ -14,27 +14,29 @@
     </MudCardHeader>
     <MudList>
         <MudListItem>
-            <MudNumericField @bind-Value="targetHours" Label="Target Hours" Format="F2" Variant="Variant.Outlined" Min="0" />
+            <MudNumericField @bind-Value="TargetHoursBinding" Label="Target Hours" Format="F2" Variant="Variant.Outlined" Min="0" />
         </MudListItem>
 
         <MudDivider />
         <MudListItem>
-            Time Utilisation: @Math.Round(OutlookCalendar.TimeUtilisationPercentage(targetHours, Events),2)%
+            Time Utilisation: @Math.Round(OutlookCalendar.TimeUtilisationPercentage(TargetHours, Events),2)%
         </MudListItem>
     </MudList>
 </MudCard>
 @code {
 
-    [Parameter, EditorRequired] public double DefaultTargetHours { get; set; }
+    [Parameter] public double TargetHours { get; set; }
+
+    [Parameter] public EventCallback<double> TargetHoursChanged { get; set; }
+
     [Parameter, EditorRequired] public IEnumerable<Event> Events { get; set; } = default!;
 
     [Parameter, EditorRequired] public OutlookCalendar Calendar { get; set; } = default!;
 
-    private double targetHours;
-
-    protected override void OnInitialized()
+    private double TargetHoursBinding
     {
-        targetHours = DefaultTargetHours;
+        get => TargetHours;
+        set => TargetHoursChanged.InvokeAsync(value);
     }
 
     private void onClick()

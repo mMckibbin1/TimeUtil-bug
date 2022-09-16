@@ -22,7 +22,7 @@
                             </MudItem>
                             @*Time Until*@
                             <MudItem xs="12">
-                                <TimeUntilCard Calendar="@Calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                                <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events" />
                             </MudItem>
                         </MudGrid>
                     </MudItem>
@@ -43,7 +43,7 @@
                     </MudItem>
                     @*Time Until*@
                     <MudItem xs="12">
-                        <TimeUntilCard Calendar="@Calendar" DefaultTargetHours="DefaultTargetHours" Events="events" />
+                        <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events" />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -60,7 +60,7 @@
     private DateOnly? startDate = null;
     private DateOnly? endDate = null;
 
-    private const double DefaultTargetHours = 120;
+    private double targetHours = 120;
 
     private OutlookCalendar? _calendar;
     private IEnumerable<Event> events = Enumerable.Empty<Event>();
