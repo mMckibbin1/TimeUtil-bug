@@ -1,13 +1,9 @@
 ﻿@using TimeUtil.Shared
 
-<MudTable AllowUnsorted="false" Striped="true" Dense="true" RowsPerPage="25" Items="@Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
+<MudTable AllowUnsorted="false" Striped="true" Dense="true" RowsPerPage="25" Items="@Events.Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Events</MudText>
         <MudSpacer />
-      @*  <MudDatePicker/>
-        <MudSpacer />
-        <MudDatePicker/>
-        <MudSpacer />*@
         <MudTextField @bind-Value="filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
@@ -39,7 +35,7 @@
         <MudTd DataLabel="Start Date">@context.StartDate | @context.StartTime</MudTd>
         <MudTd DataLabel="End Date">@context.EndDate | @context.EndTime</MudTd>
         <MudTd DataLabel="Event duration">@context.Eventduration</MudTd>
-        <MudTd DataLabel="Event duration">
+        <MudTd DataLabel="Event Categories">
             <ul>
                 @foreach (string category in context.Categories)
                 {
@@ -56,9 +52,13 @@
 </MudTable>
 
 @code {
-    [Parameter, EditorRequired] public IEnumerable<Event> Events { get; set; } = default!;
+    [Parameter, EditorRequired] public EventsTableData Events { get; set; } = default!;
 
     private string filterString = string.Empty;
+
+    private EventsTableData? _prevEvents;
+    private bool _shouldRender = true;
+
 
     private bool FilterEvents(Event calEvent)
     {
@@ -75,6 +75,24 @@
 
     protected override void OnParametersSet()
     {
-        ThrowHelpers.ThrowIfRequiredPrameterNull(Events, nameof(Events));
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Events);
+
+        if (_prevEvents != Events)
+        {
+            _prevEvents = Events;
+        }
+        else
+        {
+            _shouldRender = false;
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        bool tempShouldRender = _shouldRender;
+
+        _shouldRender = true;
+
+        return tempShouldRender;
     }
 }

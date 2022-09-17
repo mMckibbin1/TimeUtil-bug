@@ -18,11 +18,11 @@
                     <MudItem xs="12">
                         <MudGrid>
                             <MudItem xs="12">
-                                <TotalHoursCard Calendar="Calendar" Events="events" />
+                                <TotalHoursCard Calendar="Calendar" Events="events.Events" />
                             </MudItem>
                             @*Time Until*@
                             <MudItem xs="12">
-                                <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events" />
+                                <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events.Events" />
                             </MudItem>
                         </MudGrid>
                     </MudItem>
@@ -39,11 +39,11 @@
                 <MudGrid>
                     @*Total Hours Card*@
                     <MudItem xs="12">
-                        <TotalHoursCard Calendar="Calendar" Events="events" />
+                        <TotalHoursCard Calendar="Calendar" Events="events.Events" />
                     </MudItem>
                     @*Time Until*@
                     <MudItem xs="12">
-                        <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events" />
+                        <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events.Events" />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -63,7 +63,7 @@
     private double targetHours = 120;
 
     private OutlookCalendar? _calendar;
-    private IEnumerable<Event> events = Enumerable.Empty<Event>();
+    private EventsTableData events = new(Enumerable.Empty<Event>());
 
     private List<string> _selectedCategories = new();
     private List<string> SelectedCategories
@@ -78,7 +78,7 @@
 
     private void CalcEventsList()
     {
-        events = Calendar.FilterEvents(_selectedCategories, startDate, endDate);
+        events = new(Calendar.FilterEvents(_selectedCategories, startDate, endDate));
     }
 
     private void StartDatechanged(DateTime? dateTime)
@@ -127,10 +127,10 @@
 
     protected override bool ShouldRender()
     {
-        bool tempSHouldRender = _shouldRender;
+        bool tempShouldRender = _shouldRender;
 
         _shouldRender = true;
 
-        return tempSHouldRender;
+        return tempShouldRender;
     }
 }
