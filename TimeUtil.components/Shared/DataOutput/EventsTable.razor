@@ -1,30 +1,30 @@
 ﻿@using TimeUtil.Shared
 
-<MudTable AllowUnsorted="false" Striped="true" Dense="true" RowsPerPage="25" Items="@Events.Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents">
+<MudTable AllowUnsorted="false" Striped="true" Dense="true" Items="@Events.Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents" @bind-RowsPerPage="@pageSize">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Events</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
+        <MudTextField @bind-Value="@filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<Event, object?>(x=> x.EventSubject)">
+            <MudTableSortLabel SortBy="@eventSubjectSort">
                 Event Subject
             </MudTableSortLabel>
         </MudTh>
         <MudTh>
             <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                               SortBy="new Func<Event, object>(x=> x.FullStartDateTime)">
+                               SortBy="@startDateSort">
                 Start Date
             </MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<Event, object>(x=> x.FullEndDateTime)">
+            <MudTableSortLabel SortBy="@endDateSort">
                 End Date
             </MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<Event, object>(x=> x.Eventduration)">
+            <MudTableSortLabel SortBy="@eventDurationSort">
                 Event duration
             </MudTableSortLabel>
         </MudTh>
@@ -32,8 +32,8 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Event Subject">@context.EventSubject</MudTd>
-        <MudTd DataLabel="Start Date">@context.StartDate | @context.StartTime</MudTd>
-        <MudTd DataLabel="End Date">@context.EndDate | @context.EndTime</MudTd>
+        <MudTd DataLabel="Start Date">@context.FullStartDateTime</MudTd>
+        <MudTd DataLabel="End Date">@context.FullEndDateTime</MudTd>
         <MudTd DataLabel="Event duration">@context.Eventduration</MudTd>
         <MudTd DataLabel="Event Categories">
             <ul>
@@ -47,18 +47,23 @@
         </MudTd>
     </RowTemplate>
     <PagerContent>
-        <MudTablePager />
+        <MudTablePager PageSizeOptions="@pageSizeOptions" />
     </PagerContent>
 </MudTable>
 
 @code {
     [Parameter, EditorRequired] public EventsTableData Events { get; set; } = default!;
 
-    private string filterString = string.Empty;
+    private static readonly Func<Event, object?> eventSubjectSort = new(static x => x.EventSubject);
+    private static readonly Func<Event, object> startDateSort = new(static x => x.FullStartDateTime);
+    private static readonly Func<Event, object> endDateSort = new(static x => x.FullEndDateTime);
+    private static readonly Func<Event, object> eventDurationSort = new(static x => x.Eventduration);
+    private static readonly int[] pageSizeOptions = new[] { 20, 40, 60, 80, 100 };
 
+    private string filterString = string.Empty;
     private EventsTableData? _prevEvents;
     private bool _shouldRender = true;
-
+    private int pageSize = pageSizeOptions[0];
 
     private bool FilterEvents(Event calEvent)
     {
@@ -66,10 +71,11 @@
         {
             return true;
         }
-        if (calEvent.EventSubject is not null && calEvent.EventSubject.Contains(filterString, StringComparison.OrdinalIgnoreCase))
+        if (calEvent.EventSubject?.Contains(filterString, StringComparison.OrdinalIgnoreCase) == true)
         {
             return true;
         }
+
         return false;
     }
 
