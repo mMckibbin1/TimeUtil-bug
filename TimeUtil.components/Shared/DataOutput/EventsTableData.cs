@@ -5,7 +5,7 @@ public sealed class EventsTableData
 {
     public EventsTableData(IEnumerable<Event> events)
     {
-        Events = events;
+        Events = events.ToArray();
     }
 
     public IEnumerable<Event> Events { get; }

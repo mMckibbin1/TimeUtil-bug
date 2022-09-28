@@ -1,0 +1,96 @@
+﻿<MudStack Row="true">
+    <MudSelect Label="Pick start month" T="DateOnly?" Value="@MonthRange?.StartMonth" ValueChanged="SetStartDate" ToStringFunc="formatDate" Clearable="true">
+        @foreach (var item in months)
+        {
+            <MudSelectItem @key="item" Disabled="DisableStartMonth(item)" Value="item" />
+        }
+    </MudSelect>
+
+    <MudSelect Label="Pick End month" T="DateOnly?" Value="@MonthRange?.EndMonth" ValueChanged="SetEndDate" ToStringFunc="formatDate" Clearable="true">
+        @foreach (var item in months)
+        {
+            <MudSelectItem @key="item" Disabled="DisableEndMonth(item)" Value="item" />
+        }
+    </MudSelect>
+</MudStack>
+
+
+@code {
+    [Parameter] public MonthRange? MonthRange { get; set; }
+    [Parameter] public EventCallback<MonthRange?> MonthRangeChanged { get; set; }
+    [Parameter, EditorRequired] public DateTime StartDate { get; set; }
+    [Parameter, EditorRequired] public DateTime EndDate { get; set; }
+
+    private DateTime _prevStartDate;
+    private DateTime _prevEndDate;
+
+    List<DateOnly?> months = new();
+
+    private static readonly Func<DateOnly?, string?> formatDate = (d => d?.ToString("MMMM yyy"));
+
+    protected override void OnInitialized()
+    {
+        _prevStartDate = StartDate;
+        _prevEndDate = EndDate;
+
+        GenerateMonths();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (StartDate != _prevStartDate || EndDate != _prevEndDate)
+        {
+            _prevStartDate = StartDate;
+            _prevEndDate = EndDate;
+            GenerateMonths();
+        }
+    }
+
+    private void GenerateMonths()
+    {
+        months.Clear();
+
+        DateOnly current = DateOnly.FromDateTime(StartDate);
+        DateOnly endDate = DateOnly.FromDateTime(EndDate);
+
+        do
+        {
+            months.Add(current);
+            current = current.AddMonths(1);
+        } while (current < endDate);
+    }
+
+    private Task SetStartDate(DateOnly? date)
+    {
+        MonthRange monthRange = new(date, MonthRange?.EndMonth);
+
+        return MonthRangeChanged.InvokeAsync(monthRange);
+    }
+
+    private Task SetEndDate(DateOnly? date)
+    {
+        MonthRange monthRange = new(MonthRange?.StartMonth, date);
+
+        return MonthRangeChanged.InvokeAsync(monthRange);
+    }
+
+    private bool DisableStartMonth(DateOnly? date)
+    {
+        if (MonthRange?.EndMonth.HasValue != true)
+        {
+            return false;
+        }
+
+        return !(date <= MonthRange.EndMonth!.Value);
+    }
+
+    private bool DisableEndMonth(DateOnly? date)
+    {
+        if (MonthRange?.StartMonth.HasValue != true)
+        {
+            return false;
+        }
+
+        return !(date >= MonthRange.StartMonth!.Value);
+    }
+}

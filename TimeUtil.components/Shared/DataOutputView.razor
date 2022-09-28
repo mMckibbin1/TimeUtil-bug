@@ -5,13 +5,17 @@
         <MudItem xs="12">
             <h1>Results</h1>
         </MudItem>
+        <MudItem xs="12">
+            Time Util filters
+            <MudStack Row="true">
+                <MonthRangePicker @bind-MonthRange="monthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
+            </MudStack>
+
+        </MudItem>
         <MudItem md="4" lg="3" xl="2">
             <MudGrid>
                 <MudItem xs="12">
                     <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@Calendar.Categories" />
-                </MudItem>
-                <MudItem xs="12">
-                    <DateRangeCard OnStartDateChanged="StartDatechanged" OnEndDateChanged="EndDatechanged" />
                 </MudItem>
                 <MudHidden Breakpoint="Breakpoint.LgAndDown" Invert="true">
                     @*Total Hours Card*@
@@ -57,15 +61,27 @@
 
     private bool _shouldRender = true;
 
-    private DateOnly? startDate = null;
-    private DateOnly? endDate = null;
-
     private double targetHours = 120;
+
+    private DateTime? _month;
 
     private OutlookCalendar? _calendar;
     private EventsTableData events = new(Enumerable.Empty<Event>());
 
     private List<string> _selectedCategories = new();
+
+    private MonthRange? _monthRange;
+
+    private MonthRange? monthRange
+    {
+        get => _monthRange;
+        set
+        {
+            _monthRange = value;
+            CalcEventsList();
+        }
+    }
+
     private List<string> SelectedCategories
     {
         get => _selectedCategories;
@@ -78,35 +94,7 @@
 
     private void CalcEventsList()
     {
-        events = new(Calendar.FilterEvents(_selectedCategories, startDate, endDate));
-    }
-
-    private void StartDatechanged(DateTime? dateTime)
-    {
-        if (dateTime.HasValue)
-        {
-            startDate = DateOnly.FromDateTime(dateTime.Value);
-        }
-        else
-        {
-            startDate = null;
-        }
-
-        CalcEventsList();
-    }
-
-    private void EndDatechanged(DateTime? dateTime)
-    {
-        if (dateTime.HasValue)
-        {
-            endDate = DateOnly.FromDateTime(dateTime.Value);
-        }
-        else
-        {
-            endDate = null;
-        }
-
-        CalcEventsList();
+        events = new(Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth));
     }
 
     protected override void OnParametersSet()

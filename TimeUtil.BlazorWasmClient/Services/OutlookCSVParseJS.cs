@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Globalization;
 using System.Text.Json;
 using TimeUtil.Shared;
 using TimeUtil.Shared.Interfaces;
@@ -7,12 +8,14 @@ namespace TimeUtil.BlazorWasmClient.Services
 {
     public class OutlookCSVParseJS : IOutlookCalendarCSVParseService
     {
+        private static readonly CultureInfo cultureInfo = new("en-GB");
+
         private static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
         {
             Converters =
             {
-                new DateOnlyConverter(),
-                new TimeOnlyConverter()
+                new DateOnlyConverter(cultureInfo),
+                new TimeOnlyConverter(cultureInfo)
             }
         };
 

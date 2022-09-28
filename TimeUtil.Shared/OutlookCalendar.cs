@@ -1,12 +1,12 @@
-﻿
-namespace TimeUtil.Shared
+﻿namespace TimeUtil.Shared
 {
     public class OutlookCalendar
     {
         private readonly Event[] _events;
         private readonly Dictionary<string, IEnumerable<Event>> _eventLookup;
-        private string[]? _categories; 
-        
+        private string[]? _categories;
+        private DateTime? _firstEventDate;
+        private DateTime? _lastEventDate;
 
         public OutlookCalendar(IEnumerable<Event> events)
         {
@@ -17,6 +17,8 @@ namespace TimeUtil.Shared
 
         public IEnumerable<Event> Events => _events;
         public string[] Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct().ToArray();
+        public DateTime FirstEventDate => _firstEventDate ??= _events.Min(x => x.FullStartDateTime);
+        public DateTime LastEventDate => _lastEventDate ??= _events.Max(x => x.FullEndDateTime);
 
         private Dictionary<string, IEnumerable<Event>> PopulateEventLookup()
         {
