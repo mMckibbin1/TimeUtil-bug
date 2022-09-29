@@ -9,13 +9,25 @@
             Time Util filters
             <MudStack Row="true">
                 <MonthRangePicker @bind-MonthRange="monthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
+
+                <MudSelect T="string"
+                           Label="Categories"
+                           MultiSelection="true"
+                           SelectAll="true"
+                           @bind-SelectedValues="SelectedCategories"
+                           AdornmentIcon="@Icons.Material.Filled.Search">
+                    @foreach (string category in Calendar.Categories)
+                    {
+                        <MudSelectItem @key="category" T="string" Value="@category">@category</MudSelectItem>
+                    }
+                </MudSelect>
             </MudStack>
 
         </MudItem>
         <MudItem md="4" lg="3" xl="2">
             <MudGrid>
                 <MudItem xs="12">
-                    <CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@Calendar.Categories" />
+                    @*<CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@Calendar.Categories" />*@
                 </MudItem>
                 <MudHidden Breakpoint="Breakpoint.LgAndDown" Invert="true">
                     @*Total Hours Card*@
@@ -63,12 +75,10 @@
 
     private double targetHours = 120;
 
-    private DateTime? _month;
-
     private OutlookCalendar? _calendar;
     private EventsTableData events = new(Enumerable.Empty<Event>());
 
-    private List<string> _selectedCategories = new();
+    private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
 
     private MonthRange? _monthRange;
 
@@ -82,7 +92,7 @@
         }
     }
 
-    private List<string> SelectedCategories
+    private IEnumerable<string> SelectedCategories
     {
         get => _selectedCategories;
         set
@@ -104,7 +114,7 @@
         if (_calendar != Calendar)
         {
             _calendar = Calendar;
-            _selectedCategories = Calendar.Categories.ToList();
+            _selectedCategories = Calendar.Categories.ToArray();
             CalcEventsList();
         }
         else
