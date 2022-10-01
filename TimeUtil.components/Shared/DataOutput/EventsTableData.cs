@@ -8,5 +8,5 @@ public sealed class EventsTableData
         Events = events.ToArray();
     }
 
-    public IEnumerable<Event> Events { get; }
+    public IReadOnlyCollection<Event> Events { get; }
 }

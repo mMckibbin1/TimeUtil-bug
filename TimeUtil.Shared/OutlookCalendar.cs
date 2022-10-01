@@ -71,9 +71,14 @@
             return FilterEvents(null, startDate, endDate);
         }
 
-        public IEnumerable<Event> FilterEvents(IEnumerable<string>? categories = null, DateOnly? startDate = null, DateOnly? endDate = null)
+        public IEnumerable<Event> FilterEvents(IEnumerable<string>? categories = null, DateOnly? startDate = null, DateOnly? endDate = null, string? eventSubject = null)
         {
             IEnumerable<Event> local = categories is null ? _events : FilterEventsByCategories(categories);
+
+            if(!string.IsNullOrWhiteSpace(eventSubject))
+            {
+                local = local.Where(e => e.EventSubject?.Contains(eventSubject, StringComparison.OrdinalIgnoreCase) == true);
+            }
 
             if (startDate is not null)
             {

@@ -7,12 +7,12 @@
     </MudText>
     <MudStack Spacing="5">
         <MudStack Row="true">
-            <MudTextField @bind-Value="@_filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" />
+            <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />
             <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" />
             <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
         </MudStack>
         <div class="mt-1">
-            <EventsTable EventSubjectFilter="@_filterString" Events="@events" />
+            <SimpleEventsTable Events="events" />
         </div>
     </MudStack>
 </MudPaper>
@@ -27,6 +27,16 @@
     private EventsTableData events = null!;
     private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
     private MonthRange? _monthRange;
+
+    private string? FilterString
+    {
+        get => _filterString;
+        set
+        {
+            _filterString = value;
+            CalcEventsList();
+        }
+    }
 
     private MonthRange? MonthRange
     {
@@ -50,7 +60,7 @@
 
     private void CalcEventsList()
     {
-        events = new(Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth));
+        events = new(Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth, FilterString).OrderBy(static x => x.FullStartDateTime));
     }
 
     protected override void OnParametersSet()

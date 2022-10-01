@@ -7,6 +7,13 @@ internal static class DateTimeExtensions
     }
     public static DateTime GetLastDayOfMonth(this DateTime date)
     {
-        return new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+        return  new(
+            date.Year,
+            date.Month,
+            DateTime.DaysInMonth(date.Year, date.Month),
+            TimeOnly.MaxValue.Hour,
+            TimeOnly.MaxValue.Minute,
+            TimeOnly.MaxValue.Second,
+            TimeOnly.MaxValue.Millisecond);
     }
 }
