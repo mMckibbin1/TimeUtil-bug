@@ -1,6 +1,6 @@
 ﻿using TimeUtil.Shared;
 
-namespace TimeUtil.Components.Shared.DataOutput;
+namespace TimeUtil.Components.EventsTable;
 public sealed class EventsTableData
 {
     public EventsTableData(IEnumerable<Event> events)
