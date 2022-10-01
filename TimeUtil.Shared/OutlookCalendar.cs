@@ -15,7 +15,7 @@
             _eventLookup = PopulateEventLookup();
         }
 
-        public IEnumerable<Event> Events => _events;
+        public IReadOnlyCollection<Event> Events => _events;
         public string[] Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct().ToArray();
         public DateTime FirstEventDate => _firstEventDate ??= _events.Min(x => x.FullStartDateTime);
         public DateTime LastEventDate => _lastEventDate ??= _events.Max(x => x.FullEndDateTime);

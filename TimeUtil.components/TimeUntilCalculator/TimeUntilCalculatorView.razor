@@ -7,7 +7,7 @@
 <MudStack Row="true">
     <MonthRangePicker @bind-MonthRange="MonthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
     <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" HelpText="Select categoires to be included in the calculation" />
-    <MudNumericField @bind-Value="TargetHours" Label="Target Hours" Format="F2" Variant="Variant.Text" Min="0" />
+    <MudNumericField @bind-Value="TargetHours" Label="Target Hours per month" Format="F2" Variant="Variant.Text" Min="0" />
     <MudField Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Percent" Label="Time Utilisation">@Math.Round(OutlookCalendar.TimeUtilisationPercentage(_targetHours * GetNumMonths(), _events), 2)</MudField>
 </MudStack>
 
