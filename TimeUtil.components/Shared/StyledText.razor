@@ -1,0 +1,9 @@
+﻿@inherits MudText
+
+<MudElement @attributes="@UserAttributes" HtmlTag="@HtmlTag" Class="@Classname" Style="@Style">
+    @ChildContent
+</MudElement>
+
+@code {
+    [Parameter] public string HtmlTag { get; set; } = "span";
+}

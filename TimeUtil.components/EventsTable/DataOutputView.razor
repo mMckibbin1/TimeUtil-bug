@@ -2,9 +2,9 @@
 @using TimeUtil.Shared
 
 <MudPaper Class="pa-3">
-    <MudText Typo="Typo.h6">
+    <StyledText HtmlTag="h1" Typo="Typo.h6">
         Edit Events
-    </MudText>
+    </StyledText>
     <MudStack Spacing="5">
         <MudStack Row="true">
             <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />

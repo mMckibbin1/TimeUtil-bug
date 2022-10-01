@@ -1,9 +1,9 @@
 ﻿@using TimeUtil.Shared
 @using TimeUtil.Components.Extensions
 
-<MudText Typo="Typo.h6">
+<StyledText HtmlTag="h1" Typo="Typo.h6">
     Time Utilisation Calculator
-</MudText>
+</StyledText>
 <MudStack Row="true">
     <MonthRangePicker @bind-MonthRange="MonthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
     <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" HelpText="Select categoires to be included in the calculation" />

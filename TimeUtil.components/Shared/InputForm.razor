@@ -2,7 +2,7 @@
 
 <MudForm @bind-IsValid="@formValid">
 
-    <MudText Typo="Typo.subtitle1">
+    <StyledText HtmlTag="p" Typo="Typo.subtitle1">
         @if (file is null)
         {
             <text>Upload an Outloock Calender CSV</text>
@@ -34,7 +34,7 @@
                    StartIcon="@Icons.Filled.Calculate"
                    Class="ml-2" OnClick="HandleSubmit">Process</MudButton>
         }
-    </MudText>
+    </StyledText>
 
     <InputFile accept=".csv" id="fileInput" OnChange="UploadFile" hidden="hidden" />
 
