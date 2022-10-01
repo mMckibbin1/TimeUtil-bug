@@ -1,15 +1,12 @@
-﻿@page "/"
-
-@inject ISnackbar Snackbar
-@inject IOutlookCalendarCSVParseService Parser
-
-@using Microsoft.AspNetCore.Components.Forms
+﻿@using Microsoft.AspNetCore.Components.Forms
 @using TimeUtil.Shared
 @using TimeUtil.Shared.Interfaces
 @using TimeUtil.Components.TimeUntilCalculator
 
-<PageTitle>Time Utilisation</PageTitle>
+@inject ISnackbar Snackbar
+@inject IOutlookCalendarCSVParseService Parser
 
+<PageTitle>Time Utilisation</PageTitle>
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="pa-3">
@@ -32,7 +29,6 @@
                 </MudText>
             }
         </MudPaper>
-
     </MudItem>
     <MudItem xs="12">
         @if (processing)
@@ -53,11 +49,8 @@
     </MudItem>
 </MudGrid>
 
-
-
 @code {
     private OutlookCalendar? cal;
-
     private bool processing;
     private IBrowserFile? _file;
 
@@ -87,11 +80,9 @@
         }
     }
 
-
     private void Reset()
     {
         cal = null;
         _file = null;
     }
-
 }
