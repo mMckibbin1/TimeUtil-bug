@@ -1,0 +1,21 @@
+﻿<MudSelect T="string"
+           Label="Categories"
+           MultiSelection="true"
+           SelectAll="true"
+           SelectedValues="SelectedCategories"
+           SelectedValuesChanged="SelectedCategoriesChanged"
+           AdornmentIcon="@Icons.Material.Filled.Search"
+           HelperText="@HelpText">
+    @foreach (string category in Categories)
+    {
+        <MudSelectItem @key="category" T="string" Value="@category">@category</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter, EditorRequired] public IEnumerable<string> Categories { get; set; } = Enumerable.Empty<string>();
+    [Parameter] public IEnumerable<string>? SelectedCategories { get; set; }
+    [Parameter] public EventCallback<IEnumerable<string>?> SelectedCategoriesChanged { get; set; }
+    [Parameter] public string? HelpText { get; set; }
+
+}

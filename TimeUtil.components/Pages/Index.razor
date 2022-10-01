@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using TimeUtil.Shared
 @using TimeUtil.Shared.Interfaces
+@using TimeUtil.Components.TimeUntilCalculator
 
 <PageTitle>Time Utilisation</PageTitle>
 
@@ -40,7 +41,14 @@
         }
         else if (cal is not null)
         {
-            <DataOutputView Calendar="@cal" />
+            <MudStack Spacing="6">
+                <MudPaper Class="pa-3">
+                    <TimeUntilCalculatorView Calendar="cal" />
+                </MudPaper>
+                <div>
+                    <DataOutputView Calendar="@cal" />
+                </div>
+            </MudStack>
         }
     </MudItem>
 </MudGrid>

@@ -1,11 +1,6 @@
 ﻿@using TimeUtil.Shared
 
-<MudTable AllowUnsorted="false" Striped="true" Dense="true" Items="@Events.Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents" @bind-RowsPerPage="@pageSize">
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Events</MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="@filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" />
-    </ToolBarContent>
+<MudTable AllowUnsorted="false" Striped="true" Dense="true" Items="@Events.Events" Hover="true" Breakpoint="Breakpoint.Sm" Filter="FilterEvents" Elevation="0" @bind-RowsPerPage="@pageSize">
     <HeaderContent>
         <MudTh>
             <MudTableSortLabel SortBy="@eventSubjectSort">
@@ -53,6 +48,7 @@
 
 @code {
     [Parameter, EditorRequired] public EventsTableData Events { get; set; } = default!;
+    [Parameter] public string? EventSubjectFilter { get; set; }
 
     private static readonly Func<Event, object?> eventSubjectSort = new(static x => x.EventSubject);
     private static readonly Func<Event, object> startDateSort = new(static x => x.FullStartDateTime);
@@ -60,18 +56,16 @@
     private static readonly Func<Event, object> eventDurationSort = new(static x => x.Eventduration);
     private static readonly int[] pageSizeOptions = new[] { 20, 40, 60, 80, 100 };
 
-    private string filterString = string.Empty;
     private EventsTableData? _prevEvents;
-    private bool _shouldRender = true;
     private int pageSize = pageSizeOptions[0];
 
     private bool FilterEvents(Event calEvent)
     {
-        if (string.IsNullOrWhiteSpace(filterString))
+        if (string.IsNullOrWhiteSpace(EventSubjectFilter))
         {
             return true;
         }
-        if (calEvent.EventSubject?.Contains(filterString, StringComparison.OrdinalIgnoreCase) == true)
+        if (calEvent.EventSubject?.Contains(EventSubjectFilter, StringComparison.OrdinalIgnoreCase) == true)
         {
             return true;
         }
@@ -82,23 +76,5 @@
     protected override void OnParametersSet()
     {
         ThrowHelpers.ThrowIfRequiredPrameterNull(Events);
-
-        if (_prevEvents != Events)
-        {
-            _prevEvents = Events;
-        }
-        else
-        {
-            _shouldRender = false;
-        }
-    }
-
-    protected override bool ShouldRender()
-    {
-        bool tempShouldRender = _shouldRender;
-
-        _shouldRender = true;
-
-        return tempShouldRender;
     }
 }

@@ -1,88 +1,34 @@
-﻿@using TimeUtil.Shared
+﻿@using TimeUtil.Components.TimeUntilCalculator
+@using TimeUtil.Shared
 
-<MudBreakpointProvider>
-    <MudGrid>
-        <MudItem xs="12">
-            <h1>Results</h1>
-        </MudItem>
-        <MudItem xs="12">
-            Time Util filters
-            <MudStack Row="true">
-                <MonthRangePicker @bind-MonthRange="monthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
-
-                <MudSelect T="string"
-                           Label="Categories"
-                           MultiSelection="true"
-                           SelectAll="true"
-                           @bind-SelectedValues="SelectedCategories"
-                           AdornmentIcon="@Icons.Material.Filled.Search">
-                    @foreach (string category in Calendar.Categories)
-                    {
-                        <MudSelectItem @key="category" T="string" Value="@category">@category</MudSelectItem>
-                    }
-                </MudSelect>
-            </MudStack>
-
-        </MudItem>
-        <MudItem md="4" lg="3" xl="2">
-            <MudGrid>
-                <MudItem xs="12">
-                    @*<CategoriesCard @bind-FilterCategories="@SelectedCategories" Categories="@Calendar.Categories" />*@
-                </MudItem>
-                <MudHidden Breakpoint="Breakpoint.LgAndDown" Invert="true">
-                    @*Total Hours Card*@
-                    <MudItem xs="12">
-                        <MudGrid>
-                            <MudItem xs="12">
-                                <TotalHoursCard Calendar="Calendar" Events="events.Events" />
-                            </MudItem>
-                            @*Time Until*@
-                            <MudItem xs="12">
-                                <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events.Events" />
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
-                </MudHidden>
-            </MudGrid>
-        </MudItem>
-        <MudItem xs="12" md="8" lg="9" xl="8">
-            <MudCard>
-                <EventsTable Events="@events" />
-            </MudCard>
-        </MudItem>
-        <MudHidden Breakpoint="Breakpoint.Xl" Invert="true">
-            <MudItem xl="2">
-                <MudGrid>
-                    @*Total Hours Card*@
-                    <MudItem xs="12">
-                        <TotalHoursCard Calendar="Calendar" Events="events.Events" />
-                    </MudItem>
-                    @*Time Until*@
-                    <MudItem xs="12">
-                        <TimeUntilCard Calendar="@Calendar" @bind-TargetHours="targetHours" Events="events.Events" />
-                    </MudItem>
-                </MudGrid>
-            </MudItem>
-        </MudHidden>
-    </MudGrid>
-</MudBreakpointProvider>
+<MudPaper Class="pa-3">
+    <MudText Typo="Typo.h6">
+        Edit Events
+    </MudText>
+    <MudStack Spacing="5">
+        <MudStack Row="true">
+            <MudTextField @bind-Value="@_filterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" />
+            <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" />
+            <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
+        </MudStack>
+        <div class="mt-1">
+            <EventsTable EventSubjectFilter="@_filterString" Events="@events" />
+        </div>
+    </MudStack>
+</MudPaper>
 
 @code {
     [Parameter, EditorRequired]
     public OutlookCalendar Calendar { get; set; } = default!;
 
+    private string? _filterString;
     private bool _shouldRender = true;
-
-    private double targetHours = 120;
-
     private OutlookCalendar? _calendar;
-    private EventsTableData events = new(Enumerable.Empty<Event>());
-
+    private EventsTableData events = null!;
     private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
-
     private MonthRange? _monthRange;
 
-    private MonthRange? monthRange
+    private MonthRange? MonthRange
     {
         get => _monthRange;
         set

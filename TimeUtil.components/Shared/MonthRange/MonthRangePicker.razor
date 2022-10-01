@@ -1,4 +1,6 @@
-﻿<MudStack Row="true">
+﻿@namespace TimeUtil.Components.Shared
+
+<MudStack Row="true">
     <MudSelect Label="Pick start month" T="DateOnly?" Value="@MonthRange?.StartMonth" ValueChanged="SetStartDate" ToStringFunc="formatDate" Clearable="true">
         @foreach (var item in months)
         {

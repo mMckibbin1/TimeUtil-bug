@@ -1,0 +1,69 @@
+﻿@using TimeUtil.Shared
+@using TimeUtil.Components.Extensions
+
+<MudText Typo="Typo.h6">
+    Time Utilisation Calculator
+</MudText>
+<MudStack Row="true">
+    <MonthRangePicker @bind-MonthRange="MonthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
+    <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" HelpText="Select categoires to be included in the calculation" />
+    <MudNumericField @bind-Value="TargetHours" Label="Target Hours" Format="F2" Variant="Variant.Text" Min="0" />
+    <MudField Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Percent" Label="Time Utilisation">@Math.Round(OutlookCalendar.TimeUtilisationPercentage(_targetHours * GetNumMonths(), _events), 2)</MudField>
+</MudStack>
+
+@code {
+    [Parameter, EditorRequired] public OutlookCalendar Calendar { get; set; } = default!;
+
+    private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
+    private MonthRange? _monthRange;
+    private Event[] _events = Array.Empty<Event>();
+    private double _targetHours = 120;
+
+    private double TargetHours
+    {
+        get => _targetHours;
+        set
+        {
+            _targetHours = value;
+            CalcEventsList();
+        }
+    }
+
+    private MonthRange? MonthRange
+    {
+        get => _monthRange;
+        set
+        {
+            _monthRange = value;
+            CalcEventsList();
+        }
+    }
+
+    private IEnumerable<string> SelectedCategories
+    {
+        get => _selectedCategories;
+        set
+        {
+            _selectedCategories = value;
+            CalcEventsList();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        CalcEventsList();
+    }
+
+    private void CalcEventsList()
+    {
+        _events = Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth).ToArray();
+    }
+
+    private int GetNumMonths()
+    {
+        DateTime startDate = MonthRange?.StartMonth?.ToDateTime(TimeOnly.MinValue) ?? Calendar.FirstEventDate.GetFirstDayOfMonth();
+        DateTime endDate = MonthRange?.EndMonth?.ToDateTime(TimeOnly.MinValue) ?? Calendar.LastEventDate.GetLastDayOfMonth();
+
+        return (((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month) + 1;
+    }
+}
