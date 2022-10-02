@@ -12,7 +12,7 @@
             <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
         </MudStack>
         <div class="mt-1">
-            <EventsTable Events="events" />
+            <EventsTable Events="events" Categories="@Calendar.Categories" />
         </div>
     </MudStack>
 </MudPaper>
@@ -21,9 +21,8 @@
     [Parameter, EditorRequired]
     public OutlookCalendar Calendar { get; set; } = default!;
 
-    private string? _filterString;
-    private bool _shouldRender = true;
     private OutlookCalendar? _calendar;
+    private string? _filterString;
     private EventsTableData events = null!;
     private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
     private MonthRange? _monthRange;
@@ -67,24 +66,13 @@
     {
         ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar);
 
-        if (_calendar != Calendar)
+        if (Calendar != _calendar)
         {
+            _selectedCategories = Calendar.Categories;
             _calendar = Calendar;
-            _selectedCategories = Calendar.Categories.ToArray();
-            CalcEventsList();
+            _monthRange = null;
         }
-        else
-        {
-            _shouldRender = false;
-        }
-    }
 
-    protected override bool ShouldRender()
-    {
-        bool tempShouldRender = _shouldRender;
-
-        _shouldRender = true;
-
-        return tempShouldRender;
+        CalcEventsList();
     }
 }

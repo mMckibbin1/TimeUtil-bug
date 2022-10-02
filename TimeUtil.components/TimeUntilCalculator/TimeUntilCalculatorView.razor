@@ -1,5 +1,4 @@
 ﻿@using TimeUtil.Shared
-@using TimeUtil.Components.Extensions
 
 <StyledText HtmlTag="h1" Typo="Typo.h6">
     Time Utilisation Calculator
@@ -14,6 +13,7 @@
 @code {
     [Parameter, EditorRequired] public OutlookCalendar Calendar { get; set; } = default!;
 
+    private OutlookCalendar? _calendar;
     private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
     private MonthRange? _monthRange;
     private Event[] _events = Array.Empty<Event>();
@@ -51,6 +51,15 @@
 
     protected override void OnParametersSet()
     {
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar);
+
+        if (_calendar != Calendar)
+        {
+            _selectedCategories = Enumerable.Empty<string>();
+            _calendar = Calendar;
+            _monthRange = null;
+        }
+
         CalcEventsList();
     }
 

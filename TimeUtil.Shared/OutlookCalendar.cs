@@ -1,9 +1,9 @@
 ﻿namespace TimeUtil.Shared
 {
-    public class OutlookCalendar
+    public class OutlookCalendar : IDisposable
     {
         private readonly Event[] _events;
-        private readonly Dictionary<string, IEnumerable<Event>> _eventLookup;
+        private readonly Dictionary<string, HashSet<Event>> _eventLookup;
         private string[]? _categories;
         private DateTime? _firstEventDate;
         private DateTime? _lastEventDate;
@@ -12,21 +12,28 @@
         {
             _events = events.ToArray();
 
+            foreach (var @event in _events)
+            {
+                @event.OnEventUpdated += HandleEventUpdate;
+            }
+
             _eventLookup = PopulateEventLookup();
         }
+
+        public event Action? OnUpdated;
 
         public IReadOnlyCollection<Event> Events => _events;
         public string[] Categories => _categories ??= _events.SelectMany(e => e.Categories).Distinct().ToArray();
         public DateTime FirstEventDate => _firstEventDate ??= _events.Min(x => x.FullStartDateTime);
         public DateTime LastEventDate => _lastEventDate ??= _events.Max(x => x.FullEndDateTime);
 
-        private Dictionary<string, IEnumerable<Event>> PopulateEventLookup()
+        private Dictionary<string, HashSet<Event>> PopulateEventLookup()
         {
-            Dictionary<string, IEnumerable<Event>> eventLookup = new();
+            Dictionary<string, HashSet<Event>> eventLookup = new();
 
             foreach (var category in Categories)
             {
-                eventLookup.Add(category, _events.Where(ev => ev.Categories.Contains(category)));
+                eventLookup.Add(category, _events.Where(ev => ev.Categories.Contains(category)).ToHashSet());
             }
 
             return eventLookup;
@@ -75,7 +82,7 @@
         {
             IEnumerable<Event> local = categories is null ? _events : FilterEventsByCategories(categories);
 
-            if(!string.IsNullOrWhiteSpace(eventSubject))
+            if (!string.IsNullOrWhiteSpace(eventSubject))
             {
                 local = local.Where(e => e.EventSubject?.Contains(eventSubject, StringComparison.OrdinalIgnoreCase) == true);
             }
@@ -106,6 +113,31 @@
             }
 
             return events.Distinct();
+        }
+
+        private void HandleEventUpdate(EventUpdateArgs args)
+        {
+            foreach (string key in args.RemovedCategories)
+            {
+                _eventLookup[key].Remove(args.Sender);
+            }
+
+            foreach (string key in args.AddedCategories)
+            {
+                _eventLookup[key].Add(args.Sender);
+            }
+
+            OnUpdated?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            foreach (var @event in _events)
+            {
+                @event.OnEventUpdated -= HandleEventUpdate;
+            }
+
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@using TimeUtil.Shared
+
+<MudDialog>
+    <TitleContent>
+        <StyledText HtmlTag="h1" Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Filled.Edit" Class="mr-3 mb-n1" />
+            Edit Event
+        </StyledText>
+    </TitleContent>
+    <DialogContent>
+        <CategoryMultiSelect Categories="@Categories" @bind-SelectedCategories="@categories" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public Event Event { get; set; } = default!;
+    [Parameter] public IReadOnlyCollection<string> Categories { get; set; } = default!;
+
+    private IEnumerable<string> categories = default!;
+
+    protected override void OnParametersSet()
+    {
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Event);
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Categories);
+
+        categories = Event.Categories;
+    }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(categories));
+    private void Cancel() => MudDialog.Cancel();
+}
