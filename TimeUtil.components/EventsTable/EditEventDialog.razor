@@ -8,11 +8,11 @@
         </StyledText>
     </TitleContent>
     <DialogContent>
-        <CategoryMultiSelect Categories="@Categories" @bind-SelectedCategories="@categories" />
+        <CategoryMultiSelect HelpText="Edit the categories that an event belongs to" Categories="@Categories" @bind-SelectedCategories="@categories" />
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
     </DialogActions>
 </MudDialog>
 
