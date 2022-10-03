@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace TimeUtil.Shared;
 
@@ -9,25 +8,27 @@ public class Event
 
     private static readonly string[] placeHolderCategory = { "Uncategorised" };
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "Subject")]
     public string? EventSubject { get; private set; }
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "Start Date")]
     public DateOnly StartDate { get; private set; }
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "End Date")]
     public DateOnly EndDate { get; private set; }
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "Start Time")]
     public TimeOnly StartTime { get; private set; }
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "End Time")]
     public TimeOnly EndTime { get; private set; }
 
-    [JsonInclude]
+    [JsonInclude, JsonPropertyName(name: "Categories")]
     public IEnumerable<string> Categories { get; private set; } = Enumerable.Empty<string>();
 
     private TimeSpan? _Eventduration;
+
+    [JsonIgnore]
     public TimeSpan Eventduration
     {
         get
@@ -43,7 +44,10 @@ public class Event
     }
     private DateTime? _fullStartDateTime;
     private DateTime? _fullEndDateTime;
+    [JsonIgnore]
+
     public DateTime FullStartDateTime => _fullStartDateTime ??= StartDate.ToDateTime(StartTime);
+    [JsonIgnore]
     public DateTime FullEndDateTime => _fullEndDateTime ??= EndDate.ToDateTime(EndTime);
 
     public void UpdateEvent(string[] categories)

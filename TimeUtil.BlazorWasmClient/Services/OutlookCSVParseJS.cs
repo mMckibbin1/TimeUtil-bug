@@ -36,5 +36,12 @@ namespace TimeUtil.BlazorWasmClient.Services
 
             return new(events);
         }
+
+        public async Task ExportOutlookCalendar(OutlookCalendar data, string fileName)
+        {
+            string json = JsonSerializer.Serialize(data.Events, _options);
+
+            await _jSRuntime.InvokeVoidAsync("exportCSV", json, fileName);
+        }
     }
 }

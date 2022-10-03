@@ -9,9 +9,53 @@
     return JSON.stringify(events);
 }
 
+window.exportCSV = (eventsJson, fileName) => {
+    const data = JSON.parse(eventsJson);
+
+    for(let i = 0; i < data.length; i++){
+        data[i].Categories = data[i].Categories.join(";");
+    }
+
+    const unParseRes = unParseCSVAsync(data);
+
+    const blob = new Blob([unParseRes],{
+        type: "text/csv"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const anchorElement = document.createElement('a');
+    anchorElement.href = url;
+    anchorElement.download = fileName;
+    anchorElement.click();
+    anchorElement.remove();
+    URL.revokeObjectURL(url);
+}
+
+function unParseCSVAsync(json) {
+    return new Promise((resolve, reject) => {
+        const csvParseOptions = {
+            complete: (result) => resolve(result),
+            header: true,
+            skipEmptyLines: true,
+            error: (error) => reject(error)
+        };
+        Papa.unparse(json, csvParseOptions);
+    });
+}
+
+function unParseCSVAsync(data) {
+    const csvParseOptions = {
+        header: true,
+        skipEmptyLines: true,
+    };
+
+    return Papa.unparse(data, csvParseOptions);
+}
+
+
 function parseCSVAsync(file) {
     return new Promise((resolve, reject) => {
-        const csvParseOptions= {
+        const csvParseOptions = {
             complete: (result) => resolve(result),
             header: true,
             skipEmptyLines: true,
@@ -24,11 +68,11 @@ function parseCSVAsync(file) {
 function parseEvents(data) {
     return data.map(x => {
         return {
-            eventSubject: x.Subject,
-            startDate : x["Start Date"],
-            endDate: x["End Date"],
-            startTime: x["Start Time"],
-            endTime: x["End Time"],
+            "Subject": x.Subject,
+            "Start Date": x["Start Date"],
+            "End Date": x["End Date"],
+            "Start Time": x["Start Time"],
+            "End Time": x["End Time"],
             categories: categoiresConverter(x.Categories),
         };
     })

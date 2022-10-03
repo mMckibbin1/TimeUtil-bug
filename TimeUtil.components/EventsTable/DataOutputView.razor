@@ -1,10 +1,17 @@
 ﻿@using TimeUtil.Components.TimeUntilCalculator
 @using TimeUtil.Shared
+@using TimeUtil.Shared.Interfaces
+
+@inject IOutlookCalendarCSVParseService Parse
+@inject ISnackbar Snackbar
+@inject IDialogService Dialog
+
 
 <MudPaper Class="pa-3">
     <StyledText HtmlTag="h1" Typo="Typo.h6">
         Edit Events
     </StyledText>
+    <MudButton Disabled="isExporting" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="ExportCalendar" StartIcon="@Icons.Filled.Download" Class="mt-2">Export</MudButton>
     <MudStack Spacing="5">
         <MudStack Row="true">
             <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />
@@ -21,11 +28,15 @@
     [Parameter, EditorRequired]
     public OutlookCalendar Calendar { get; set; } = default!;
 
+    private static readonly DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
+
+
     private OutlookCalendar? _calendar;
     private string? _filterString;
     private EventsTableData events = null!;
     private IEnumerable<string> _selectedCategories = Enumerable.Empty<string>();
     private MonthRange? _monthRange;
+    private bool isExporting;
 
     private string? FilterString
     {
@@ -60,6 +71,33 @@
     private void CalcEventsList()
     {
         events = new(Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth, FilterString).OrderBy(static x => x.FullStartDateTime));
+    }
+
+    private async Task ExportCalendar()
+    {
+        isExporting = true;
+        try
+        {
+            var dialogRef = Dialog.Show<ExportFileNameDialog>("", dialogOptions);
+
+            var res = await dialogRef.Result;
+
+            if (res.TryGetSuccessfulResult(out string? fileName))
+            {
+                await Parse.ExportOutlookCalendar(Calendar, fileName);
+            }
+        }
+        catch
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add($"There was an error when exporting the file", Severity.Error);
+            throw;
+        }
+        finally
+        {
+            isExporting = false;
+        }
+
     }
 
     protected override void OnParametersSet()

@@ -1,6 +1,8 @@
 ﻿@using TimeUtil.Shared
+@using TimeUtil.Shared.Interfaces
 
 @inject IDialogService DialogService
+@inject IOutlookCalendarCSVParseService Parser
 
 <MudSimpleTable Hover="true" Striped="true" Dense="true" Elevation="0" Outlined="true">
     <thead>

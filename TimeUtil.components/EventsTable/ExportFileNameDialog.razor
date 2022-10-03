@@ -1,0 +1,24 @@
+﻿<MudDialog>
+    <TitleContent>
+        <StyledText HtmlTag="h1" Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Filled.Edit" Class="mr-3 mb-n1" />
+            Export name
+        </StyledText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="fileName" Label="File Name" DebounceInterval="0.1" Required="true" RequiredError="File name is required" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Disabled="@(string.IsNullOrWhiteSpace(fileName))" Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
+
+    private string? fileName;
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(fileName));
+    private void Cancel() => MudDialog.Cancel();
+}
