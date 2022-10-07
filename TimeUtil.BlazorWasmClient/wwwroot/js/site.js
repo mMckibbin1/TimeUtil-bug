@@ -16,7 +16,7 @@ window.exportCSV = (eventsJson, fileName) => {
         data[i].Categories = data[i].Categories.join(";");
     }
 
-    const unParseRes = unParseCSVAsync(data);
+    const unParseRes = unParseCSV(data);
 
     const blob = new Blob([unParseRes],{
         type: "text/csv"
@@ -31,19 +31,7 @@ window.exportCSV = (eventsJson, fileName) => {
     URL.revokeObjectURL(url);
 }
 
-function unParseCSVAsync(json) {
-    return new Promise((resolve, reject) => {
-        const csvParseOptions = {
-            complete: (result) => resolve(result),
-            header: true,
-            skipEmptyLines: true,
-            error: (error) => reject(error)
-        };
-        Papa.unparse(json, csvParseOptions);
-    });
-}
-
-function unParseCSVAsync(data) {
+function unParseCSV(data) {
     const csvParseOptions = {
         header: true,
         skipEmptyLines: true,
