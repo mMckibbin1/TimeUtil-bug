@@ -11,13 +11,19 @@
     <StyledText HtmlTag="h1" Typo="Typo.h6">
         Edit Events
     </StyledText>
-    <MudButton Disabled="isExporting" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="ExportCalendar" StartIcon="@Icons.Filled.Download" Class="mt-2">Export all Events</MudButton>
     <MudStack Spacing="5">
-        <MudStack Row="true">
-            <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />
-            <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" />
-            <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
-        </MudStack>
+        <MudButton Style="width:fit-content;" Disabled="isExporting" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="ExportCalendar" StartIcon="@Icons.Filled.Download" Class="mt-2">Export all Events</MudButton>
+        <MudGrid Spacing="2">
+            <MudItem xs="12" sm="6"  lg="4">
+                <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="5">
+                <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" />
+            </MudItem>
+            <MudItem xs="12"  lg="3">
+                <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
+            </MudItem>
+        </MudGrid>
         <div class="mt-1">
             <EventsTable Events="events" Categories="@Calendar.Categories" />
         </div>

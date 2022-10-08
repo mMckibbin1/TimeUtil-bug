@@ -1,14 +1,14 @@
 ﻿@namespace TimeUtil.Components.Shared
 
 <MudStack Row="true">
-    <MudSelect Label="Pick start month" T="DateOnly?" Value="@MonthRange?.StartMonth" ValueChanged="SetStartDate" ToStringFunc="formatDate" Clearable="true">
+    <MudSelect Label="Pick Start Month" T="DateOnly?" Value="@MonthRange?.StartMonth" ValueChanged="SetStartDate" ToStringFunc="formatDate" Clearable="true">
         @foreach (var item in months)
         {
             <MudSelectItem @key="item" Disabled="DisableStartMonth(item)" Value="item" />
         }
     </MudSelect>
 
-    <MudSelect Label="Pick End month" T="DateOnly?" Value="@MonthRange?.EndMonth" ValueChanged="SetEndDate" ToStringFunc="formatDate" Clearable="true">
+    <MudSelect Label="Pick End Month" T="DateOnly?" Value="@MonthRange?.EndMonth" ValueChanged="SetEndDate" ToStringFunc="formatDate" Clearable="true">
         @foreach (var item in months)
         {
             <MudSelectItem @key="item" Disabled="DisableEndMonth(item)" Value="item" />

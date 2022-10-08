@@ -58,17 +58,45 @@
         }
     </tbody>
 </MudSimpleTable>
-<MudStack Justify="Justify.FlexEnd" Row="true" Class="mt-3">
-    <div class="d-flex flex-row">
-        <MudSelect T="int" Label="Rows per page" FullWidth="false" @bind-Value="PageSize">
-            @foreach (int option in pageSizeOptions)
-            {
-                <MudSelectItem Value="@option" />
-            }
-        </MudSelect>
-        <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4" ShowFirstButton="true" ShowLastButton="true" MiddleCount="0" />
-    </div>
-</MudStack>
+<MudBreakpointProvider>
+    <MudHidden Invert="true" Breakpoint="Breakpoint.MdAndUp">
+        <MudStack Row="true" Class="mt-3 align-center" Style="width:fit-content; margin-left:auto;" Spacing="3">
+            <MudSelect T="int" Label="Rows per page" FullWidth="false" @bind-Value="PageSize">
+                @foreach (int option in pageSizeOptions)
+                {
+                    <MudSelectItem Value="@option" />
+                }
+            </MudSelect>
+            <div style="text-align:center;">
+                <StyledText HtmlTag="span" Typo="Typo.body1">
+                    @LowerBoundItem - @UpBoundItem of @Events.Events.Count
+                </StyledText>
+            </div>
+            <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4" ShowFirstButton="true" ShowLastButton="true" MiddleCount="0" />
+        </MudStack>
+    </MudHidden>
+    <MudHidden Invert="true" Breakpoint="Breakpoint.SmAndDown">
+        <MudGrid Class="align-center mt-1" Justify="Justify.FlexEnd">
+            <MudItem xs="12" sm="6">
+                <MudSelect T="int" Label="Rows per page" FullWidth="false" @bind-Value="PageSize">
+                    @foreach (int option in pageSizeOptions)
+                    {
+                        <MudSelectItem Value="@option" />
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" Style="text-align:center;">
+                <StyledText HtmlTag="span" Typo="Typo.body1">
+                    @LowerBoundItem - @UpBoundItem of @Events.Events.Count
+                </StyledText>
+            </MudItem>
+            <MudItem Class="align-end" xs="12">
+                <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4" ShowFirstButton="true" ShowLastButton="true" MiddleCount="0" />
+            </MudItem>
+        </MudGrid>
+    </MudHidden>
+</MudBreakpointProvider>
+
 
 
 @code {
@@ -103,6 +131,9 @@
             _events = GetPageOfEvents();
         }
     }
+
+    private int LowerBoundItem => ((_currentPage - 1) * _pageSize) + 1;
+    private int UpBoundItem => _events.Length < _pageSize ? Events.Events.Count : _events.Length * _currentPage;
 
     protected override void OnParametersSet()
     {
