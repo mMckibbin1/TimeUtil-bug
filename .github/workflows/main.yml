@@ -1,6 +1,4 @@
 name: DeployToGitHubPages
-env:
-  PUBLISH_DIR: bin/Release/net6.0/publish/wwwroot
 
 # Controls when the action will run
 on:
@@ -8,19 +6,28 @@ on:
     branches: [ github_pages ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+    deploy-to-github-pages:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
-    - name: Publish app
-      run: dotnet publish ~/TimeUtil.BlazorWasmClient/TimeUtil.BlazorWasmClient.csproj -c Release
+            - name: Setup .NET Core SDK
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: 6.x
 
-    - name: GitHub Pages
-      if: success()
-      uses: crazy-max/ghaction-github-pages@v1.5.1
-      with:
-        target_branch: gh-pages
-        build_dir: ${{ env.PUBLISH_DIR }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Publish .NET Core Project
+              run: dotnet publish /TimeUtil.BlazorWasmClient/TimeUtil.BlazorWasmClient.csproj -c Release
+
+            - name: copy index.html to 404.html
+              run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+            - name: Add .nojekyll file
+              run: touch release/wwwroot/.nojekyll
+
+            - name: Commit wwwroot to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@3.7.1
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  BRANCH: github_pages
+                  FOLDER: release/wwwroot
