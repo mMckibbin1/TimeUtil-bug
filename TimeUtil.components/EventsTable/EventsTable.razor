@@ -72,7 +72,7 @@
                     @LowerBoundItem - @UpBoundItem of @Events.Events.Count
                 </StyledText>
             </div>
-            <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4" ShowFirstButton="true" ShowLastButton="true" MiddleCount="0" />
+            <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4"  MiddleCount="0" />
         </MudStack>
     </MudHidden>
     <MudHidden Invert="true" Breakpoint="Breakpoint.SmAndDown">
@@ -91,7 +91,7 @@
                 </StyledText>
             </MudItem>
             <MudItem Class="align-end" xs="12">
-                <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4" ShowFirstButton="true" ShowLastButton="true" MiddleCount="0" />
+                <MudPagination @bind-Selected="CurrentPage" Count="_numberOfPages" BoundaryCount="0" Class="pa-4"  MiddleCount="0" />
             </MudItem>
         </MudGrid>
     </MudHidden>

@@ -4,14 +4,14 @@
     <MudSelect Label="Pick Start Month" T="DateOnly?" Value="@MonthRange?.StartMonth" ValueChanged="SetStartDate" ToStringFunc="formatDate" Clearable="true">
         @foreach (var item in months)
         {
-            <MudSelectItem @key="item" Disabled="DisableStartMonth(item)" Value="item" />
+            <MudSelectItem T="DateOnly?" @key="item" Disabled="DisableStartMonth(item)" Value="item" />
         }
     </MudSelect>
 
     <MudSelect Label="Pick End Month" T="DateOnly?" Value="@MonthRange?.EndMonth" ValueChanged="SetEndDate" ToStringFunc="formatDate" Clearable="true">
         @foreach (var item in months)
         {
-            <MudSelectItem @key="item" Disabled="DisableEndMonth(item)" Value="item" />
+            <MudSelectItem T="DateOnly?" @key="item" Disabled="DisableEndMonth(item)" Value="item" />
         }
     </MudSelect>
 </MudStack>
@@ -26,7 +26,7 @@
     private DateTime _prevStartDate;
     private DateTime _prevEndDate;
 
-    List<DateOnly?> months = new();
+    List<DateOnly> months = new();
 
     private static readonly Func<DateOnly?, string?> formatDate = (d => d?.ToString("MMMM yyy"));
 
@@ -76,7 +76,7 @@
         return MonthRangeChanged.InvokeAsync(monthRange);
     }
 
-    private bool DisableStartMonth(DateOnly? date)
+    private bool DisableStartMonth(DateOnly date)
     {
         if (MonthRange?.EndMonth.HasValue != true)
         {
@@ -86,7 +86,7 @@
         return !(date <= MonthRange.EndMonth!.Value);
     }
 
-    private bool DisableEndMonth(DateOnly? date)
+    private bool DisableEndMonth(DateOnly date)
     {
         if (MonthRange?.StartMonth.HasValue != true)
         {

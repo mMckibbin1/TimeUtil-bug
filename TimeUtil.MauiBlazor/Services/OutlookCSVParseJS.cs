@@ -23,6 +23,11 @@ namespace TimeUtil.MauiBlazor.Services
             _jSRuntime = jSRuntime;
         }
 
+        public Task ExportOutlookCalendar(OutlookCalendar data, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<OutlookCalendar> ParseOutlookCalendar(Stream data)
         {
             using DotNetStreamReference streamRef = new(stream: data);
