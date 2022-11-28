@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 
 namespace TimeUtil.Components.Shared
@@ -13,5 +12,14 @@ namespace TimeUtil.Components.Shared
                 throw new InvalidOperationException($"{nameofPrameter} of type {typeof(T).Name} can not be null");
             }
         }
+
+        public static void ThrowIfRequiredCascadingPrameterNull<T>([NotNull] T? pramerter)
+        {
+            if (pramerter is null)
+            {
+                throw new InvalidOperationException($"Required Cascading prameter of type {typeof(T).Name} must be provided");
+            }
+        }
+
     }
 }

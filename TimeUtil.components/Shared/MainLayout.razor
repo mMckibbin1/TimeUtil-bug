@@ -1,7 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using TimeUtil.Components.Theme
 
-<MudThemeProvider @bind-IsDarkMode="@darkMode" />
-<MudDialogProvider />
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="Theme.MudTheme" @bind-IsDarkMode="@darkMode" />
+<MudDialogProvider MaxWidth="MaxWidth.Medium" FullWidth="true" DisableBackdropClick="true"/>
 <MudSnackbarProvider />
 
 <MudLayout>

@@ -8,9 +8,13 @@
 
 
 <MudPaper Class="pa-3">
-    <StyledText HtmlTag="h1" Typo="Typo.h6">
-        Edit Events
-    </StyledText>
+    <div class="d-flex flex-row justify-space-between">
+        <StyledText HtmlTag="h1" Typo="Typo.h6">
+            Edit Events
+        </StyledText>
+        <MudIconButton Size="@Size.Small" Icon="@Icons.Filled.Help" Title="Help for Time utilisation calcultor" OnClick="@OpenHelpDialog" />
+    </div>
+
     <MudStack Spacing="5">
         <MudButton Style="width:fit-content;" Disabled="isExporting" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="ExportCalendar" StartIcon="@Icons.Filled.Download" Class="mt-2">Export all Events</MudButton>
         <MudGrid Spacing="2">
@@ -18,7 +22,7 @@
                 <MudTextField @bind-Value="@FilterString" Placeholder="Search Event Subject" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Clearable="true" />
             </MudItem>
             <MudItem xs="12" sm="6" lg="5">
-                <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" />
+                <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" TextFunc="TextHelpers.GetMultiSelectionText" />
             </MudItem>
             <MudItem xs="12" lg="3">
                 <MonthRangePicker StartDate="@Calendar.FirstEventDate" EndDate="@Calendar.LastEventDate" @bind-MonthRange="@MonthRange" />
@@ -74,6 +78,20 @@
         }
     }
 
+    protected override void OnParametersSet()
+    {
+        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar);
+
+        if (Calendar != _calendar)
+        {
+            _selectedCategories = Calendar.Categories;
+            _calendar = Calendar;
+            _monthRange = null;
+        }
+
+        CalcEventsList();
+    }
+
     private void CalcEventsList()
     {
         events = new(Calendar.FilterEvents(_selectedCategories, _monthRange?.StartMonth, _monthRange?.EndMonth, FilterString).OrderBy(static x => x.FullStartDateTime));
@@ -106,17 +124,10 @@
 
     }
 
-    protected override void OnParametersSet()
+    private void OpenHelpDialog()
     {
-        ThrowHelpers.ThrowIfRequiredPrameterNull(Calendar);
-
-        if (Calendar != _calendar)
-        {
-            _selectedCategories = Calendar.Categories;
-            _calendar = Calendar;
-            _monthRange = null;
-        }
-
-        CalcEventsList();
+        Dialog.Show<EventsTableHelpDialog>("Help");
     }
+
+
 }

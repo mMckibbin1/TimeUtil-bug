@@ -7,8 +7,7 @@
            AdornmentIcon="@Icons.Material.Filled.Search"
            HelperText="@HelpText"
            SelectAllText="@SelectAllText"
-           Text="@GetMultiSelectionText()"
->
+           Text="@GetSelectionText()">
     @foreach (string category in Categories)
     {
         <MudSelectItem @key="category" T="string" Value="@category">@category</MudSelectItem>
@@ -21,16 +20,19 @@
     [Parameter] public EventCallback<IEnumerable<string>?> SelectedCategoriesChanged { get; set; }
     [Parameter] public string? HelpText { get; set; }
     [Parameter] public string? SelectAllText { get; set; } = "Select all";
+    [Parameter] public Func<IEnumerable<string>?, string>? TextFunc { get; set; }
 
 
-    private string? GetMultiSelectionText()
+    private string GetSelectionText()
     {
-        int count = SelectedCategories?.Count() ?? 0;
-        if(count == 0)
+        if (TextFunc is null)
         {
-            return null;
+            return string.Join(", ", SelectedCategories ?? Enumerable.Empty<string>());
         }
-        return $"{count} categor{(count > 1 ? "ies have" : "y has")} been selected";
+        else
+        {
+            return TextFunc(SelectedCategories);
+        }
     }
 
 }

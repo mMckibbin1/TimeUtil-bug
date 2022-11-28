@@ -1,14 +1,19 @@
 ﻿@using TimeUtil.Shared
+@inject IDialogService DialogService
 
-<StyledText HtmlTag="h1" Typo="Typo.h6">
-    Time Utilisation Calculator
-</StyledText>
+<div class="d-flex flex-row justify-space-between">
+    <StyledText HtmlTag="h1" Typo="Typo.h6">
+        Time Utilisation Calculator
+    </StyledText>
+    <MudIconButton Size="@Size.Small" Icon="@Icons.Filled.Help" Title="Help for Time utilisation calcultor" OnClick="@OpenHelpDialog" />
+</div>
+
 <MudGrid Spacing="2">
     <MudItem xs="12" sm="6" lg="4">
         <MonthRangePicker @bind-MonthRange="MonthRange" StartDate="Calendar.FirstEventDate" EndDate="Calendar.LastEventDate" />
     </MudItem>
     <MudItem xs="12" sm="6" lg="4">
-        <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" HelpText="Select categoires to be included in the calculation" />
+        <CategoryMultiSelect @bind-SelectedCategories="SelectedCategories" Categories="Calendar.Categories" HelpText="Select categoires to be included in the calculation" TextFunc="TextHelpers.GetMultiSelectionText" />
     </MudItem>
     <MudItem xs="12" sm="6" lg="2">
         <MudNumericField @bind-Value="TargetHours" Label="Target Hours per month" Format="F2" Variant="Variant.Text" Min="0" />
@@ -82,5 +87,10 @@
         DateTime endDate = MonthRange?.EndMonth?.ToDateTime(TimeOnly.MinValue) ?? Calendar.LastEventDate.GetLastDayOfMonth();
 
         return (((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month) + 1;
+    }
+
+    private void OpenHelpDialog()
+    {
+        DialogService.Show<TimeUtilCalculatorHelpDialog>("Help");
     }
 }
