@@ -112,7 +112,7 @@
                 }
             }
 
-            return events.Distinct();
+            return events;
         }
 
         private void HandleEventUpdate(EventUpdateArgs args)

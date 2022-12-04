@@ -7,6 +7,6 @@ internal static class DateOnlyExtensions
     }
     public static DateOnly GetLastDayOfMonth(this DateOnly date)
     {
-        return new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+        return new(date.Year, date.Month, 28);
     }
 }

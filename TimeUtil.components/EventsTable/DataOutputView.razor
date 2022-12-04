@@ -108,7 +108,7 @@
 
             if (res.TryGetSuccessfulResult(out string? fileName))
             {
-                await Parse.ExportOutlookCalendar(Calendar, fileName);
+                await Parse.ExportOutlookCalendar(Calendar, $"{fileName}1");
             }
         }
         catch
