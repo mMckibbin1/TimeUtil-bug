@@ -47,7 +47,7 @@
       "System.Text.RegularExpressions.dll": "sha256-CrwlkITQ8WTzI3Xed+rZUkuD3pIeY7jM6p1ZVZLmKEs=",
       "System.Threading.dll": "sha256-mpIyr0SQjmnSLJx7EOQRfqPP1c7SZuORCGypwAbSFKE=",
       "TimeUtil.BlazorWasmClient.dll": "sha256-50x1ZusSQEgVqDPBJupzIJy\/gVpl23sDEj\/5xyIemTM=",
-      "TimeUtil.Components.dll": "sha256-RiGzGReJjBOmo4EqO8XaxlOTZ5JDQgGS3RIOPlwpA9E=",
+      "TimeUtil.Components.dll": "sha256-RkmvY5T3OqEpUYXhJx6lHKAAm3f4mbnz4aD5FYb20i0=",
       "TimeUtil.Shared.dll": "sha256-OCLKh7uxpcCQ7UqfXxCf2eljMwZ8g7Ybh\/k1QiFWMQw="
     },
     "extensions": null,
